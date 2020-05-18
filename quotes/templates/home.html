@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if api %}
+	{% if api == "Error..." %}
+		There was a problem with the api, fix it.
+	{% else %}
+
+
+		<h4> {{api.name}} </h4>
+		<h5> - Net change in followers: {{ percent_change }}% </h5>
+		<h5> - Initial number of followers: {{ first_num_followers }} </h5>
+		<h5> - Current number of followers: has {{ curr_num_followers }} </h5>
+		{% load static %}
+		<img src="{% static "stocks/graph.png" %}" alt="My image">
+		
+	{% endif %}
+{% else %}
+	{% if e %}
+		The URI {{ e }} could not be found
+	{% endif %}
+	<div class="container">
+  	<div class="row">
+    <div class="col text-center">
+	<form  action= "{% url 'home' %}" method="POST">
+	{% csrf_token %}
+	
+		<h2> Enter a Spotify Playlist URI </h2>
+		<input name="ticker" class="form-control mr-sm-2" type="search" value="spotify:playlist:1kuvKUsWFvzELdUQn94XxY" aria-label="Search">
+		<br/>
+    	<button class="btn btn-success my-2 my-sm-0" type="submit">Check it out!</button>
+	</form>
+	</div>
+	</div>
+	</div>
+	{{ api }}
+	<br/>
+	
+{% endif %}
+
+{% endblock %}

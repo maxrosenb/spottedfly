@@ -1,0 +1,18 @@
+table {
+    width: 100%;
+}
+td {
+    max-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+td.columnA {
+    width: 35%;
+}
+td.columnB {
+    width: 45%;
+}
+td.columnC {
+    width: 20%;
+}

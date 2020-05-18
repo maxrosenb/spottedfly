@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<h1>All Playlists</h1>
+
+<br/>
+  <table>
+    <tr>
+        <th>Chart</th>
+
+        <th>Name</th>
+
+        <th>Followers</th>
+    </tr>
+    {% for pl in playlists %}
+	<tr>
+	    <td>
+	        <form action= "{% url 'home' %}" class="form-inline my-2 my-lg-0" method="post">	
+	        <input class="form-control mr-sm-2" type="submit" name="ticker" value="{{pl.0}}">
+	        {% csrf_token %}
+	        </form>
+	    </td>
+	    <td>
+	        {{pl.1.name}}
+	    </td>
+	    <td>
+	        {{pl.2}}
+	    </td>
+	</tr>
+	{% endfor %}
+</table>
+
+{% endblock %}

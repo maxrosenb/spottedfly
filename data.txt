@@ -1,0 +1,80 @@
+{
+    "spotify:playlist:1Me5JiRrpe9MmZiH2XzP0C": {
+        "followers_data": [
+            {
+                "followers": 12463,
+                "timestamp": "2020-05-18 02:39:41.746506"
+            },
+            {
+                "followers": 12463,
+                "timestamp": "2020-05-18 02:39:45.629829"
+            }
+        ],
+        "name": "Juice WRLD Leaks + Unreleased Music! - Righteous  Wishing Well Bye Bye Cigarettes Codeine Casket Autograph Moonlight Time Stops My fault Under Her Skin Killing my vibe Sometimes Addictions "
+    },
+    "spotify:playlist:1kuvKUsWFvzELdUQn94XxY": {
+        "followers_data": [
+            {
+                "followers": 29753,
+                "timestamp": "2020-05-18 02:39:41.420366"
+            },
+            {
+                "followers": 29753,
+                "timestamp": "2020-05-18 02:39:45.300644"
+            }
+        ],
+        "name": "TikTok Songs Vol. 5 | Laxed - Siren Beat - Jawsh 685 - Say So X Like That X Do it Again TikTok Hits"
+    },
+    "spotify:playlist:40bEHNh0CRn9lKjShMSFLD": {
+        "followers_data": [
+            {
+                "followers": 191813,
+                "timestamp": "2020-05-18 02:39:41.990063"
+            },
+            {
+                "followers": 191813,
+                "timestamp": "2020-05-18 02:39:45.875614"
+            }
+        ],
+        "name": "SPECTRUM IO"
+    },
+    "spotify:playlist:6GiFeACBNcDux53vzTqjwj": {
+        "followers_data": [
+            {
+                "followers": 52611,
+                "timestamp": "2020-05-18 02:39:41.559819"
+            },
+            {
+                "followers": 52611,
+                "timestamp": "2020-05-18 02:39:45.484877"
+            }
+        ],
+        "name": "TikTok Music & Hits 2020 | Work Out - J Cole - Flatbed Freestyle X Everything BoZ - Dream Girl"
+    },
+    "spotify:playlist:7dxjMUob42LjvS9uNkcdl4": {
+        "followers_data": [
+            {
+                "followers": 26283,
+                "timestamp": "2020-05-18 02:39:41.264388"
+            },
+            {
+                "followers": 26283,
+                "timestamp": "2020-05-18 02:39:45.098301"
+            }
+        ],
+        "name": "Trap en ingl\u00e9s\ud83d\udd252020\ud83d\udd25"
+    },
+    "spotify:playlist:7q0i2c5CmnXpjP5LfyVIj3": {
+        "followers_data": [
+            {
+                "followers": 131060,
+                "timestamp": "2020-05-18 02:39:41.837398"
+            },
+            {
+                "followers": 131060,
+                "timestamp": "2020-05-18 02:39:45.735148"
+            }
+        ],
+        "name": "International Newcomers"
+    }
+}
