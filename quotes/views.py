@@ -11,6 +11,7 @@ from .models import Playlist
 from background_task import background
 from django_cron import CronJobBase, Schedule
 import io
+from django.contrib.auth.decorators import login_required
 import urllib, base64
 
 client_credentials_manager = SpotifyClientCredentials(client_id='83403a77c90f4836b8287b70bac39a33',client_secret="48cd4347f180427fb116fd9376f10ca2")
@@ -30,6 +31,7 @@ def track_task():
 	print("RUN BACKGROUND TEST!", pg.playlist_data)
 	pg.track_all_playlists(initial_playlists)
 
+@login_required
 def home(request):
 
 
@@ -37,7 +39,7 @@ def home(request):
 		pg.track_all_playlists(initial_playlists)
 		ticker = request.POST.get("ticker")
 		try:
-			
+
 			api = pg.playlist_data[ticker]
 			percents = pg.get_playlist_percent_changes(ticker)
 			percent_change = round(pg.get_percent_change(ticker), 3)
@@ -51,21 +53,23 @@ def home(request):
 			logging.error(traceback.format_exc())
 			return render(request, 'home.html', {'ticker': ticker, 'e' : e})
 
-	else:       
-		
-		
+	else:
+
+
 		return render(request, 'home.html', {'ticker': 'To get started, simply enter a spotify playlist URI into the search bar.'})
 
+@login_required
 def stock_added(request):
-	initial_playlists.append(request.POST['ticker'])
-	print(initial_playlists[-1])
-	pg.track_all_playlists(initial_playlists)
 	if request.method == 'POST':
 		ticker = request.POST['ticker']
 		results = sp.playlist(ticker)
 		print("RESULTS: ", results)
+		initial_playlists.append(request.POST['ticker'])
+		print(initial_playlists[-1])
+		pg.track_all_playlists(initial_playlists)
 	return render(request, 'stock_added.html', {})
 
+@login_required
 def all_playlists(request):
 	pls = []
 	for pl in pg.playlist_data.keys():
@@ -74,8 +78,10 @@ def all_playlists(request):
 
 	return render(request, 'all_playlists.html', {'playlists' : pls})
 
+@login_required
 def add_stock(request):
 	return render(request, 'add_stock.html', {})
 
+@login_required
 def about(request):
 	return render(request, 'about.html', {})

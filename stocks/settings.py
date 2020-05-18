@@ -30,7 +30,7 @@ ALLOWED_HOSTS = [
     '192.168.1.4',
     'c39640aa.ngrok.io',
     'spottedfly-env.eba-qxprpnpz.us-east-2.elasticbeanstalk.com',
-    'spottedfly.ninja',
+    'www.spottedfly.ninja',
     'django-env.eba-32ddrjbk.us-west-2.elasticbeanstalk.com',
 
 ]
@@ -64,7 +64,7 @@ ROOT_URLCONF = 'stocks.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -127,8 +127,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = ''
+STATIC_ROOT = '/home/maxrosenbe/spottedfly/static'
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = ( os.path.join('static'), )
+
+LOGIN_URL = '/accounts/login'
+
+LOGIN_REDIRECT_URL = '/'

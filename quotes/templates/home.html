@@ -13,8 +13,8 @@
 		<h5> - Initial number of followers: {{ first_num_followers }} </h5>
 		<h5> - Current number of followers: has {{ curr_num_followers }} </h5>
 		{% load static %}
-		<img src="{% static "stocks/graph.png" %}" alt="My image">
-		
+		<img src="{% static 'stocks/graph.png' %}" alt="My image">
+
 	{% endif %}
 {% else %}
 	{% if e %}
@@ -25,7 +25,7 @@
     <div class="col text-center">
 	<form  action= "{% url 'home' %}" method="POST">
 	{% csrf_token %}
-	
+
 		<h2> Enter a Spotify Playlist URI </h2>
 		<input name="ticker" class="form-control mr-sm-2" type="search" value="spotify:playlist:1kuvKUsWFvzELdUQn94XxY" aria-label="Search">
 		<br/>
@@ -36,7 +36,7 @@
 	</div>
 	{{ api }}
 	<br/>
-	
+
 {% endif %}
 
 {% endblock %}

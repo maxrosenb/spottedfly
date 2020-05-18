@@ -1,8 +1,8 @@
 from datetime import datetime
-import time 
+import time
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
-import matplotlib            
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import pandas as pd
@@ -34,7 +34,7 @@ class PlaylistGetter:
             json_data = json.load(f)
         for key in json_data.keys():
             self.playlist_data[key] = { 'name' : json_data[key]['name'], 'followers_data' :json_data[key]['followers_data']}
-           
+
 
     def save_all_data_to_txt(self):
         with open('data.txt', 'w') as outfile:
@@ -72,7 +72,7 @@ class PlaylistGetter:
         plt.ylabel('Spotify Followers Gained (%)')
         plt.plot(x_vars, y_vars, 'bd-', label=data['name'])
         plt.tight_layout()
-        my_path = '/Users/betsybeyer/djangostock/stocks/'
+        my_path = '/home/maxrosenbe/spottedflyweb/'
         fig.savefig(my_path + 'static/stocks/graph.png', dpi=100)
 
 
@@ -89,4 +89,3 @@ if __name__ == "__main__":
     #pg.track_on_loop(playlists)
     #pg.get_data_from_file('data.txt')
     #print(pg.get_playlist_data('spotify:playlist:7dxjMUob42LjvS9uNkcdl4')['followers'][0])
-    
