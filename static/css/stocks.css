@@ -16,3 +16,23 @@ td.columnB {
 td.columnC {
     width: 20%;
 }
+
+.imagebox {
+  width: 50%;
+  float: left;
+  padding-bottom: 20px;
+  padding-right: 20px;
+}
+
+.textbox {
+  width: 50%;
+  float: right;
+  text-align: center;
+  padding-top: 20px;
+  padding-right: 20px;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+}

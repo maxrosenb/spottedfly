@@ -45,8 +45,11 @@ def home(request):
 			percent_change = round(pg.get_percent_change(ticker), 3)
 			first_num_followers = api['followers_data'][0]['followers']
 			curr_num_followers = api['followers_data'][len(percents) - 1]['followers']
+			change_in_followers = curr_num_followers - first_num_followers
 			pg.graph(ticker)
-			args = {'ticker': ticker, 'api' : api, 'percents' : percents, 'percent_change' : percent_change, 'first_num_followers' : first_num_followers, 'curr_num_followers' : curr_num_followers}
+			res = sp.playlist(ticker)
+			image = res['images'][0]['url']
+			args = {'image': image, 'ticker': ticker, 'api' : api, 'percents' : percents, 'percent_change' : percent_change, 'first_num_followers' : first_num_followers, 'curr_num_followers' : curr_num_followers, 'change_in_followers': change_in_followers}
 			return render(request, 'home.html', args)
 		except Exception as e:
 			api = "Error..."
@@ -63,9 +66,7 @@ def stock_added(request):
 	if request.method == 'POST':
 		ticker = request.POST['ticker']
 		results = sp.playlist(ticker)
-		print("RESULTS: ", results)
 		initial_playlists.append(request.POST['ticker'])
-		print(initial_playlists[-1])
 		pg.track_all_playlists(initial_playlists)
 	return render(request, 'stock_added.html', {})
 

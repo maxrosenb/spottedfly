@@ -64,16 +64,19 @@ class PlaylistGetter:
         y_vars = self.get_playlist_percent_changes(uri)
         print(type(data['followers_data'][0]['timestamp']))
         x_vars = [datapoint['timestamp'] for datapoint in data['followers_data']]
+        graph_name = data['name']
 
         fig, ax = plt.subplots(1)
         fig.autofmt_xdate()
-        plt.title('Spotify Playlist Growth May 2020')
+        fig.patch.set_facecolor('#28A745')
+        #ax.set_facecolor("m")
+        plt.title(graph_name[:20] + " Follower Growth")
         plt.xlabel('Time')
         plt.ylabel('Spotify Followers Gained (%)')
-        plt.plot(x_vars, y_vars, 'bd-', label=data['name'])
+        plt.plot(x_vars, y_vars, 'ko-', label=data['name'])
         plt.tight_layout()
         my_path = '/home/maxrosenbe/spottedflyweb/'
-        fig.savefig(my_path + 'static/stocks/graph.png', dpi=100)
+        fig.savefig(my_path + 'static/stocks/graph.png', facecolor = fig.get_facecolor(), dpi=130)
 
 
 if __name__ == "__main__":

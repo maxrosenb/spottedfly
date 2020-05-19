@@ -1,19 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+{% load static %}
 {% if api %}
 	{% if api == "Error..." %}
 		There was a problem with the api, fix it.
 	{% else %}
 
-
-		<h4> {{api.name}} </h4>
-		<h5> - Net change in followers: {{ percent_change }}% </h5>
+	    <div class="imagebox">
+	        <img src="{% static 'stocks/graph.png' %}" alt="My image">
+        </div>
+        <div class="textbox">
+            <h3> {{api.name}} </h3>
+            <img src= "{{image}}" alt="pic" width="200" height="200"/>
+        </div>
+		<h5> - Net change in followers: {{ percent_change }}% ({{change_in_followers}}  followers gained) </h5>
 		<h5> - Initial number of followers: {{ first_num_followers }} </h5>
 		<h5> - Current number of followers: has {{ curr_num_followers }} </h5>
-		{% load static %}
-		<img src="{% static 'stocks/graph.png' %}" alt="My image">
+
+
+
 
 	{% endif %}
 {% else %}
@@ -25,7 +31,8 @@
     <div class="col text-center">
 	<form  action= "{% url 'home' %}" method="POST">
 	{% csrf_token %}
-
+        <h1> Welcome to Spottedfly</h1>
+        <br/>
 		<h2> Enter a Spotify Playlist URI </h2>
 		<input name="ticker" class="form-control mr-sm-2" type="search" value="spotify:playlist:1kuvKUsWFvzELdUQn94XxY" aria-label="Search">
 		<br/>
