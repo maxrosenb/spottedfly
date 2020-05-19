@@ -2,7 +2,7 @@
 
 www.spottedfly.ninja
 
-Currently closed due to the private nature of the data. For the very curious, please message me about acquiring a login. 
+Login required due to the private nature of the data. For the very curious, please message me about acquiring a login. 
 
 Here are some screenshots of Spottedfly on launch day.
 ![image](https://user-images.githubusercontent.com/35173688/82271134-cff7fa00-992b-11ea-9f58-a4ca79ee4bd4.png)
