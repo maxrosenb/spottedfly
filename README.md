@@ -2,7 +2,9 @@
 
 www.spottedfly.ninja
 
-Spottedfly is a Spotify data research suite offered by Soundrunners inc.
+Spottedfly is a Spotify data research suite offered by Soundrunners Inc.
+
+Spottedfly is built with Javascript and Python using the Django web framework. Spottedfly is hosted on Pythonanywhere and is protected by Cloudflare. 
 
 An account is required due to the private nature of the data. For the very curious, please message me about acquiring a login. 
 
