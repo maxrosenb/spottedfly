@@ -1,6 +1,6 @@
 # Spottedfly
 
-www.spottedfly.ninja
+[spottedfly.ninja](www.spottedfly.ninja)
 
 Spottedfly is a Spotify data research suite offered by Soundrunners Inc.
 
