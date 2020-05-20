@@ -1,22 +1,3 @@
-table {
-    width: 100%;
-}
-td {
-    max-width: 70px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-td.columnA {
-    width: 35%;
-}
-td.columnB {
-    width: 45%;
-}
-td.columnC {
-    width: 20%;
-}
-
 .imagebox {
   width: 50%;
   float: left;
@@ -35,4 +16,11 @@ td.columnC {
 img {
   width: 100%;
   height: 100%;
+}
+
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
 }

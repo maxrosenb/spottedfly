@@ -73,6 +73,8 @@ class PlaylistGetter:
         plt.title(graph_name[:20] + " Follower Growth")
         plt.xlabel('Time')
         plt.ylabel('Spotify Followers Gained (%)')
+        axes = plt.gca()
+        axes.set_ylim([-1 , 10])
         plt.plot(x_vars, y_vars, 'ko-', label=data['name'])
         plt.tight_layout()
         my_path = '/home/maxrosenbe/spottedflyweb/'
