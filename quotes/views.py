@@ -6,10 +6,10 @@ import spotipy
 import traceback
 import logging
 from datetime import datetime
-import getter
 from .models import Playlist
 from background_task import background
 from django_cron import CronJobBase, Schedule
+from django.shortcuts import get_list_or_404, get_object_or_404
 import io
 from django.contrib.auth.decorators import login_required
 import urllib, base64
@@ -21,44 +21,38 @@ max_client_secret = '48cd4347f180427fb116fd9376f10ca2'
 
 client_credentials_manager = SpotifyClientCredentials(client_id=max_client_id,client_secret=max_client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-pg = getter.PlaylistGetter()
-initial_playlists = ['spotify:playlist:0lxrR2ESnZjm8fPnaXODbv',
-'spotify:playlist:0MMCB0rG70wSa2aLdxXidT',
-'spotify:playlist:1FT2CwQxjkdFRtzOhNCyXh',
-'spotify:playlist:1lWVabpPJSBoctR00myPHG',
-'spotify:playlist:2HrIc0FQHCHSNJ21Q43lTy',
-'spotify:playlist:2piahix4woQ9jkXK3iArNx',
-'spotify:playlist:43udSsOeQC1mlUYf18fb2J',
-'spotify:playlist:5e434MGaSp34Xp3goFo8Si',
-'spotify:playlist:5S3lVGQRbqDSM8lNCKe2P7',
-'spotify:playlist:7MCmRWuAkOM76ReXMdVGN4']
-pg.track_all_playlists(initial_playlists)
 
 
-@background(schedule=60)
-def track_task():
-	print("RUN BACKGROUND TEST!", pg.playlist_data)
-	pg.track_all_playlists(initial_playlists)
+def my_cron_job():
+	print("CRON JOB GOING!")
+	queryset = Playlist.objects.all()
+	for playlist in queryset:
+		playlist.followers_list += "," + str(sp.playlist(playlist.playlist_uri)['followers']['total'])
+		now = datetime.now()
+		playlist.dates_list += "," + now.strftime('%Y-%m-%d %H:%M:%S')
+		playlist.save()
+		print(playlist, playlist.followers_list)
 
 @login_required
 def home(request):
-
-
 	if request.method == 'POST':
-		pg.track_all_playlists(initial_playlists)
 		ticker = request.POST.get("ticker")
 		try:
-
-			api = pg.playlist_data[ticker]
-			percents = pg.get_playlist_percent_changes(ticker)
-			percent_change = round(pg.get_percent_change(ticker), 3)
-			first_num_followers = api['followers_data'][0]['followers']
-			curr_num_followers = api['followers_data'][len(percents) - 1]['followers']
-			change_in_followers = curr_num_followers - first_num_followers
-			pg.graph(ticker)
 			res = sp.playlist(ticker)
+			pl = get_object_or_404(Playlist, playlist_uri=ticker)
+			playlist_name = res['name']
+			dates = [str(x)[:-3] for x in pl.dates_list.split(',') if x]
+			folls = [int(x) for x in pl.followers_list.split(',') if x]
 			image = res['images'][0]['url']
-			args = {'image': image, 'ticker': ticker, 'api' : api, 'percents' : percents, 'percent_change' : percent_change, 'first_num_followers' : first_num_followers, 'curr_num_followers' : curr_num_followers, 'change_in_followers': change_in_followers}
+			len_headers = len(dates)
+			len_data = len(folls)
+			result = []
+			for x in range(0, len_data, len_headers):
+				for key, val in zip(dates, folls[x:x+len_headers]):
+					result.append({'t': key, 'y': val})
+
+			args = {'image': image, 'ticker': ticker, 'api' : res, 'playlist_name' : playlist_name, 'result': result}
+			result = json.dumps(result)
 			return render(request, 'home.html', args)
 		except Exception as e:
 			api = "Error..."
@@ -75,21 +69,14 @@ def stock_added(request):
 	if request.method == 'POST':
 		ticker = request.POST['ticker']
 		results = sp.playlist(ticker)
-		initial_playlists.append(request.POST['ticker'])
-		pg.track_all_playlists(initial_playlists)
+		now = datetime.now()
+		new_playlist = Playlist(playlist_uri=ticker, followers_list=results['followers']['total'], dates_list=now.strftime('%Y-%m-%d %H:%M:%S'))
+		new_playlist.save()
 	return render(request, 'stock_added.html', {})
 
 @login_required
 def all_playlists(request):
-	pls = []
-	for pl in pg.playlist_data.keys():
-	    api = pg.playlist_data[pl]
-	    first_num_followers = api['followers_data'][0]['followers']
-	    curr_num_followers = api['followers_data'][len(api['followers_data']) - 1]['followers']
-	    percent_change = round(pg.get_percent_change(pl), 3)
-	    diff = curr_num_followers - first_num_followers
-	    datum = pg.playlist_data[pl]
-	    pls.append((pl,datum,datum['followers_data'][-1]['followers'], diff, percent_change))
+	pls = Playlist.objects.all()
 
 	return render(request, 'all_playlists.html', {'playlists' : pls})
 
@@ -106,8 +93,8 @@ def view_songs(request):
     if request.method == 'POST':
         song1_features = sp.audio_features([request.POST['song1']])
         song2_features = sp.audio_features([request.POST['song2']])
-        song1_name = request.POST['song1name']
-        song2_name = request.POST['song2name']
+        song1_name = sp.track(request.POST['song1'])['name']
+        song2_name = sp.track(request.POST['song2'])['name']
 
     return render(request, 'view_songs.html', {'song1_features': song1_features[0], 'song2_features': song2_features[0], 'song1_name': song1_name, 'song2_name': song2_name})
 

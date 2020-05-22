@@ -2,21 +2,30 @@
 
 {% block content %}
 {% load static %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+<script src="/assets/js/jquery-1.12.0.min.js"></script>
 {% if api %}
 	{% if api == "Error..." %}
 		There was a problem with the api, fix it.
 	{% else %}
+    <h2>{{playlist_name}} Followers Info</h2>
+    <div class="container">
+  <canvas id="examChart2"></canvas>
+</div>
+<div class="container">
+  <canvas id="examChart"></canvas>
+</div>
 
-	    <div class="imagebox">
-	        <img src="{% static 'stocks/graph.png' %}" alt="My image">
+		 <li id="chart_place">Hey, this is where it goes</li>
+
+	    <div class="textbox">
+	        {{playlist.followers_list}}
+	        {{playlist.dates_list}}
         </div>
         <div class="textbox">
             <h3> {{api.name}} </h3>
             <img src= "{{image}}" alt="pic" width="200" height="200"/>
         </div>
-		<h5> - Net change in followers: {{ percent_change }}% ({{change_in_followers}}  followers gained) </h5>
-		<h5> - Initial number of followers: {{ first_num_followers }} </h5>
-		<h5> - Current number of followers: has {{ curr_num_followers }} </h5>
 
 
 
@@ -45,5 +54,102 @@
 	<br/>
 
 {% endif %}
+
+
+		<script type="text/javascript">
+		var chart_data=[];
+
+		var i;
+    var x = "{{result}}";
+    const res= "{{ result| safe }}";
+    var res_obj = eval('(' + res + ')');
+    for (var i = 0; i < res_obj.length; i++) { 
+      //document.getElementById('chart_place').innerHTML += '<li>' + 'pl: ' + res_obj[i].y + '</li>';
+      chart_data.push({
+        t: new Date(res_obj[i].t),
+        y: res_obj[i].y
+      });
+      document.getElementById('chart_place').innerHTML += '<li>' + 'pl: ' + i + " " + chart_data[i].t;
+    }
+    
+    //document.getElementById('chart_place').innerHTML += '<li>' + 'res: ' + chart_data + '</li>';
+    document.write(JSON.stringify(chart_data));
+    var dataset = {
+      data: {
+          datasets: [{
+              label: 'Scatter Dataset',
+              data: []
+                  }]
+               } 
+            };
+    var coordinates = [];
+    dataset.data.datasets[0].data = coordinates;
+
+    // your loop, edited slightly
+    for (var i = 0; i < res_obj.length; i++) { 
+      //document.getElementById('chart_place').innerHTML += '<li>' + 'pl: ' + res_obj[i].y + '</li>';
+      coordinates.push({
+        t: new Date(res_obj[i].t),
+        y: res_obj[i].y
+      });
+    }     
+		var ctx = document.getElementById("examChart").getContext("2d");
+
+var ctx = document.getElementById("examChart").getContext("2d");
+var ctx2 = document.getElementById("examChart2").getContext("2d");
+var data=[];
+data['labels']=[];
+data['datasets']=[];
+data['datasets'][0]={
+    data: [],
+    backgroundColor: [],
+    borderColor: "rgba(0,0,0,0)",
+    label: '{{playlist_name}}'
+};
+for (i=0;i<res_obj.length;i++){
+    pl=res_obj[i];
+    data['labels'][i]=pl.t;
+    data['datasets'][0].data[i]={t :pl.t, y: pl.y};
+    data['datasets'][0].backgroundColor[i]='rgba(54, 162, 235, 0.2)';
+}
+
+var myNewChart = new Chart(ctx2,{type: 'line',data: data});
+var myChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    //labels: [chart_data[0].t.toLocaleString(), chart_data[1].t.toLocaleString(), chart_data[2].t.toLocaleString()],
+    datasets: [{
+      label: '{{playlist_name}}',
+      data: [{
+          t: chart_data[0].t,
+          y: chart_data[0].y
+        },
+        {
+          t: chart_data[1].t,
+          y: chart_data[1].y
+        },
+        {
+          t: chart_data[2].t,
+          y: chart_data[2].y
+        }
+      ],
+      backgroundColor: [
+        'rgba(54, 162, 235, 0.2)',
+      ],
+      borderColor: [
+        'rgba(153, 102, 255, 1)',
+      ],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    scales: {
+      xAxes: [{
+        type: 'time'
+      }]
+    }
+  }
+});
+</script>
 
 {% endblock %}

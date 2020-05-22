@@ -9,9 +9,7 @@
 <form action= "{% url 'view_songs' %}" class="form-inline my-2 my-lg-0" method ="POST">
     	{% csrf_token %}
       <input class="form-control mr-sm-2" type="search" placeholder="Song 1 URI" aria-label="Search" name="song1">
-      <input class="form-control mr-sm-2" type="search" placeholder="Song 1 Name" aria-label="Search" name="song1name">
       <input class="form-control mr-sm-2" type="search" placeholder="Song 2 URI" aria-label="Search" name="song2">
-      <input class="form-control mr-sm-2" type="search" placeholder="Song 2 Name" aria-label="Search" name="song2name">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Compare Songs</button>
     </form>
 

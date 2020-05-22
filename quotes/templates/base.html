@@ -34,6 +34,15 @@
       <li class="nav-item">
         <a class="nav-link" href="{% url 'get_recs' %}" style="color:#FFFFFF">View Track Recommendations</a>
       </li>
+      {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}" style="color:#FFFFFF">Logout</a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}" style="color:#FFFFFF">Login</a>
+        </li>
+      {% endif %}
     </ul>
     <form action= "{% url 'home' %}" class="form-inline my-2 my-lg-0" method ="POST">
     	{% csrf_token %}

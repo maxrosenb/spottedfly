@@ -1,9 +1,10 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView
+from django.conf.urls import include
 from . import views
 
 urlpatterns = [
-    path('login', LoginView.as_view()),
+	path('accounts/', include('django.contrib.auth.urls')),
 	path('', views.home, name="home"),
 	path('recs', views.get_recs, name="get_recs"),
 	path('view_recs', views.view_recs, name="view_recs"),
