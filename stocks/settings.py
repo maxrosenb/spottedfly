@@ -1,3 +1,4 @@
+"""Django Settings Module"""
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -38,7 +39,7 @@ INSTALLED_APPS = [
 ]
 
 CRONJOBS = [
-    ('*/2 * * * *', 'quotes.views.my_cron_job')
+    ('0 * * * *', 'quotes.views.my_cron_job')
 ]
 
 MIDDLEWARE = [
@@ -123,7 +124,7 @@ STATIC_ROOT = '/home/maxrosenbe/spottedfly/static'
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = ( os.path.join('static'), )
+STATICFILES_DIRS = (os.path.join('static'),)
 
 LOGIN_URL = '/accounts/login'
 

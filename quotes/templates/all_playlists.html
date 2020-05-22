@@ -5,7 +5,7 @@
   <thead>
     <tr>
       <th scope="col">Chart</th>
-      <th scope="col">Followers</th>
+      <th scope="col">Name</th>
     </tr>
   </thead>
   <tbody>
@@ -18,10 +18,7 @@
 	        </form>
 	    </td>
 	    <td>
-	        {% with pl.followers_list|last as last %}
-                {{ last }}
-            {% endwith %}
-	        {{pl.followers_list}}
+	        {{pl.name}}
 	    </td>
 	</tr>
 	{% endfor %}
