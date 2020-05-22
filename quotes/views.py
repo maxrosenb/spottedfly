@@ -7,7 +7,6 @@ import traceback
 import logging
 from datetime import datetime
 from .models import Playlist
-from background_task import background
 from django_cron import CronJobBase, Schedule
 from django.shortcuts import get_list_or_404, get_object_or_404
 import io

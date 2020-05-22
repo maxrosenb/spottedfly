@@ -9,6 +9,7 @@
 		There was a problem with the api, fix it.
 	{% else %}
     <h2>{{playlist_name}} Followers Info</h2>
+    <h3>{{api.followers.total}} Followers</h3>
     <div class="container">
   <canvas id="examChart2"></canvas>
 </div>
@@ -16,7 +17,6 @@
   <canvas id="examChart"></canvas>
 </div>
 
-		 <li id="chart_place">Hey, this is where it goes</li>
 
 	    <div class="textbox">
 	        {{playlist.followers_list}}
@@ -63,36 +63,33 @@
     var x = "{{result}}";
     const res= "{{ result| safe }}";
     var res_obj = eval('(' + res + ')');
-    for (var i = 0; i < res_obj.length; i++) { 
+    for (var i = 0; i < res_obj.length; i++) {
       //document.getElementById('chart_place').innerHTML += '<li>' + 'pl: ' + res_obj[i].y + '</li>';
       chart_data.push({
         t: new Date(res_obj[i].t),
         y: res_obj[i].y
       });
-      document.getElementById('chart_place').innerHTML += '<li>' + 'pl: ' + i + " " + chart_data[i].t;
     }
-    
-    //document.getElementById('chart_place').innerHTML += '<li>' + 'res: ' + chart_data + '</li>';
-    document.write(JSON.stringify(chart_data));
+
     var dataset = {
       data: {
           datasets: [{
               label: 'Scatter Dataset',
               data: []
                   }]
-               } 
+               }
             };
     var coordinates = [];
     dataset.data.datasets[0].data = coordinates;
 
     // your loop, edited slightly
-    for (var i = 0; i < res_obj.length; i++) { 
+    for (var i = 0; i < res_obj.length; i++) {
       //document.getElementById('chart_place').innerHTML += '<li>' + 'pl: ' + res_obj[i].y + '</li>';
       coordinates.push({
         t: new Date(res_obj[i].t),
         y: res_obj[i].y
       });
-    }     
+    }
 		var ctx = document.getElementById("examChart").getContext("2d");
 
 var ctx = document.getElementById("examChart").getContext("2d");
@@ -113,43 +110,16 @@ for (i=0;i<res_obj.length;i++){
     data['datasets'][0].backgroundColor[i]='rgba(54, 162, 235, 0.2)';
 }
 
-var myNewChart = new Chart(ctx2,{type: 'line',data: data});
-var myChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    //labels: [chart_data[0].t.toLocaleString(), chart_data[1].t.toLocaleString(), chart_data[2].t.toLocaleString()],
-    datasets: [{
-      label: '{{playlist_name}}',
-      data: [{
-          t: chart_data[0].t,
-          y: chart_data[0].y
-        },
-        {
-          t: chart_data[1].t,
-          y: chart_data[1].y
-        },
-        {
-          t: chart_data[2].t,
-          y: chart_data[2].y
+var myNewChart = new Chart(ctx2,{type: 'line',data: data, options: {
+        scales: {
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Followers'
+                  }
+            }]
         }
-      ],
-      backgroundColor: [
-        'rgba(54, 162, 235, 0.2)',
-      ],
-      borderColor: [
-        'rgba(153, 102, 255, 1)',
-      ],
-      borderWidth: 1
-    }]
-  },
-  options: {
-    scales: {
-      xAxes: [{
-        type: 'time'
-      }]
-    }
-  }
-});
+    }});
 </script>
 
 {% endblock %}

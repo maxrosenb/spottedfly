@@ -18,6 +18,9 @@
 	        </form>
 	    </td>
 	    <td>
+	        {% with pl.followers_list|last as last %}
+                {{ last }}
+            {% endwith %}
 	        {{pl.followers_list}}
 	    </td>
 	</tr>
