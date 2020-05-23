@@ -11,6 +11,8 @@ myvenv/
 spottedenv.bak
 myvenv.bak
 .vscode
+.DS_Store
+.pylintrc
 .ebextensions 
 !.vscode/settings.json 
 !.vscode/tasks.json 
