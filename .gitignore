@@ -10,7 +10,8 @@ spottedenv/
 myvenv/
 spottedenv.bak
 myvenv.bak
-.vscode/* 
+.vscode
+.ebextensions 
 !.vscode/settings.json 
 !.vscode/tasks.json 
 !.vscode/launch.json 
