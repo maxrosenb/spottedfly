@@ -3,13 +3,17 @@
 {% block content %}
 {% load static %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
-<script src="/assets/js/jquery-1.12.0.min.js"></script>
+<script>
+$(window).scroll(function(){
+    $(".top").css("opacity", 1 - $(window).scrollTop() / 250);
+  });</script>
 {% if api %}
 	{% if api == "Error..." %}
 		There was a problem with the api, fix it.
 	{% else %}
     <h2>{{playlist_name}} Followers Info</h2>
-    <h3>{{api.followers.total}} Followers</h3>
+    {% load humanize %}
+    <h3>{{init_followers|intcomma}}&#8594;{{api.followers.total|intcomma}} Followers</h3>
     <div class="container">
   <canvas id="examChart2"></canvas>
 </div>
@@ -17,12 +21,7 @@
   <canvas id="examChart"></canvas>
 </div>
 
-
-	    <div class="textbox">
-	        {{playlist.followers_list}}
-	        {{playlist.dates_list}}
-        </div>
-        <div class="textbox">
+        <div class="imagebox">
             <h3> {{api.name}} </h3>
             <img src= "{{image}}" alt="pic" width="200" height="200"/>
         </div>
@@ -33,25 +32,9 @@
 	{% endif %}
 {% else %}
 	{% if e %}
-		{{ e }}
+		<h2>{{ e }}</h2>
 	{% endif %}
-	<div class="container">
-  	<div class="row">
-    <div class="col text-center">
-	<form  action= "{% url 'home' %}" method="POST">
-	{% csrf_token %}
-        <h1> Welcome to Spottedfly</h1>
-        <br/>
-		<h2> Enter a Spotify Playlist URI </h2>
-		<input name="ticker" class="form-control mr-sm-2" type="search" value="spotify:playlist:1kuvKUsWFvzELdUQn94XxY" aria-label="Search">
-		<br/>
-    	<button class="btn btn-success my-2 my-sm-0" type="submit">Check it out!</button>
-	</form>
-	</div>
-	</div>
-	</div>
-	{{ api }}
-	<br/>
+
 
 {% endif %}
 
@@ -82,7 +65,7 @@
     var coordinates = [];
     dataset.data.datasets[0].data = coordinates;
 
-    // your loop, edited slightly
+    
     for (var i = 0; i < res_obj.length; i++) {
       //document.getElementById('chart_place').innerHTML += '<li>' + 'pl: ' + res_obj[i].y + '</li>';
       coordinates.push({
@@ -122,4 +105,15 @@ var myNewChart = new Chart(ctx2,{type: 'line',data: data, options: {
     }});
 </script>
 
+<hr>
+<a class="btn btn-outline-dark" href="{% url 'add_comment_to_playlist' pk=playlist.pk %}">Add comment</a>
+{% for comment in playlist.comments.all %}
+    <div class="comment">
+        <div class="date">{{ comment.created_date }}</div>
+        <strong>{{ comment.author }}</strong>
+        <p>{{ comment.text|linebreaks }}</p>
+    </div>
+{% empty %}
+    <p>No comments here yet :(</p>
+{% endfor %}
 {% endblock %}

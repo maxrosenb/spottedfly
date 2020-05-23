@@ -14,5 +14,7 @@ urlpatterns = [
 	path('about', views.about, name="about"),
 	path('add', views.add_stock, name="add_stock"),
 	path('playlist_success', views.stock_added, name="stock_added"),
-	path('all', views.all_playlists, name ="all_playlists")
+	path('all', views.all_playlists, name="all_playlists"),
+	path('playlist/<int:pk>/comment/', views.add_comment_to_post, name='add_comment_to_playlist'),
+
 ]

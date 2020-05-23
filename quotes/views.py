@@ -11,7 +11,7 @@ from django.shortcuts import render, redirect
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 from .models import Playlist
-
+from .forms import CommentForm
 MAX_CLIENT_ID = '83403a77c90f4836b8287b70bac39a33'
 MAX_CLIENT_SECRET = '48cd4347f180427fb116fd9376f10ca2'
 
@@ -44,11 +44,12 @@ def home(request):
 			len_headers = len(dates)
 			len_data = len(folls)
 			result = []
+			playlist = Playlist.objects.get(playlist_uri=ticker)
 			for x in range(0, len_data, len_headers):
 				for key, val in zip(dates, folls[x:x+len_headers]):
 					result.append({'t': key, 'y': val})
 
-			args = {'image': image, 'ticker': ticker, 'api' : res, 'playlist_name' : playlist_name, 'result': result}
+			args = {'image': image, 'ticker': ticker, 'api' : res, 'playlist_name' : playlist_name, 'result': result, 'init_followers' : folls[0], 'playlist' : playlist}
 			result = json.dumps(result)
 			return render(request, 'home.html', args)
 		except ValueError as e_error:
@@ -56,7 +57,7 @@ def home(request):
 			logging.error(traceback.format_exc())
 			return render(request, 'home.html', {'ticker': ticker, 'e' : 'The requested playlist is not ready yet, just check back after the hour and get data mining.'})
 	else:
-		return render(request, 'home.html', {'ticker': 'To get started, simply enter a spotify playlist URI into the search bar.'})
+		return redirect(all_playlists)
 
 @login_required
 def stock_added(request):
@@ -113,3 +114,16 @@ def get_recs(request):
 def about(request):
 	"""About"""
 	return render(request, 'about.html', {})
+
+def add_comment_to_post(request, pk):
+    post = get_object_or_404(Playlist, pk=pk)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+            return redirect(all_playlists)
+    else:
+        form = CommentForm()
+    return render(request, 'add_comment_to_playlist.html', {'form': form})
