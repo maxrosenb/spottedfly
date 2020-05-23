@@ -10,3 +10,11 @@ spottedenv/
 myvenv/
 spottedenv.bak
 myvenv.bak
+.vscode/* 
+!.vscode/settings.json 
+!.vscode/tasks.json 
+!.vscode/launch.json 
+!.vscode/extensions.json 
+.history
+pip-log.txt 
+pip-delete-this-directory.txt
