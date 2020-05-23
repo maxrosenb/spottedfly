@@ -8,6 +8,7 @@ from datetime import datetime
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 from .models import Playlist
@@ -73,8 +74,11 @@ def stock_added(request):
 def all_playlists(request):
 	"""View List of Playlist"""
 	pls = Playlist.objects.all()
+	paginator = Paginator(pls, 10) # Show 25 contacts per page.
+	page_number = request.GET.get('page')
+	page_obj = paginator.get_page(page_number)
 
-	return render(request, 'all_playlists.html', {'playlists' : pls})
+	return render(request, 'all_playlists.html', {'playlists' : pls, 'page_obj': page_obj})
 
 @login_required
 def add_stock(request):
@@ -116,14 +120,16 @@ def about(request):
 	return render(request, 'about.html', {})
 
 def add_comment_to_post(request, pk):
-    post = get_object_or_404(Playlist, pk=pk)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.save()
-            return redirect(all_playlists)
-    else:
-        form = CommentForm()
-    return render(request, 'add_comment_to_playlist.html', {'form': form})
+	""" Add Comment to Playlist """
+	post = get_object_or_404(Playlist, pk=pk)
+	if request.method == "POST":
+		form = CommentForm(request.POST)
+		if form.is_valid():
+			comment = form.save(commit=False)
+			comment.post = post
+			comment.save()
+			return redirect(all_playlists)
+	else:
+		form = CommentForm()
+	return render(request, 'add_comment_to_playlist.html', {'form': form})
+	

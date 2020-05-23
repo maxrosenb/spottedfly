@@ -7,11 +7,11 @@
     <tr>
       <th scope="col">Chart</th>
       <th scope="col">Name</th>
-	  <th scope="col"># Comments</th>
+	  <th scope="col"># Comments</th>	
     </tr>
   </thead>
   <tbody>
-    {% for pl in playlists %}
+    {% for pl in page_obj %}
 	<tr>
 	    <td>
 	        <form action= "{% url 'home' %}" class="form-inline my-2 my-lg-0" method="post">
@@ -30,4 +30,22 @@
   </tbody>
 </table>
 
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}

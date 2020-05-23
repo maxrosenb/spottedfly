@@ -2,9 +2,10 @@
 Spottedfly views.py
 """
 
+from datetime import datetime
 from django.db import models
 from django.core.validators import validate_comma_separated_integer_list
-from datetime import datetime
+
 class Playlist(models.Model):
 	"""Playlist Model for Database"""
 	name = models.CharField(max_length=100)
@@ -24,8 +25,11 @@ class Comment(models.Model):
 	approved_comment = models.BooleanField(default=False)
 
 	def approve(self):
+		"""Approve Comment"""
 		self.approved_comment = True
 		self.save()
 
 	def __str__(self):
+		""" str rep """
 		return self.text
+		
