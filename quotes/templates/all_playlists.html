@@ -1,13 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<script src="https://kit.fontawesome.com/cf79e18cdd.js" crossorigin="anonymous"></script>
 <h1> Playlists </h1>
+<style>
+.yellowdot {
+  height: 25px;
+  width: 25px;
+  background-color: #FFFF00;
+  border-radius: 50%;
+  display: inline-block;
+}
+.reddot {
+  height: 25px;
+  width: 25px;
+  background-color: #FF0000;
+  border-radius: 50%;
+  display: inline-block;
+}
+.orangereddot {
+  height: 25px;
+  width: 25px;
+  background-color: #FFBF00;
+  border-radius: 50%;
+  display: inline-block;
+}
+.greendot {
+  height: 25px;
+  width: 25px;
+  background-color: #28A745;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.darkgreendot {
+  height: 25px;
+  width: 25px;
+  background-color: #006400;
+  border-radius: 50%;
+  display: inline-block;
+}
+</style>
 <table class="table">
   <thead>
     <tr>
       <th scope="col">Chart</th>
       <th scope="col">Name</th>
-	  <th scope="col"># Comments</th>	
+	  <th scope="col">Comments</th>
+	  <th scope="col">Growth Quality</th>
+	  <th scope="col">Sus</th>
     </tr>
   </thead>
   <tbody>
@@ -24,6 +65,22 @@
 	    </td>
 		<td>
 		{{ pl.comments.count }}
+		</td>
+		<td>
+		{% if pl.get_quality_display == "Neutral" %}
+		<span class="yellowdot"></span>
+		{% elif pl.get_quality_display == "Bad" %}
+		<span class="orangereddot"></span>
+		{% elif pl.get_quality_display == "Terrible" %}
+		<span class="reddot"></span>
+		{% elif pl.get_quality_display == "Good" %}
+		<span class="greendot"></span>
+		{% elif pl.get_quality_display == "Excellent" %}
+		<span class="darkgreendot"></span>
+		{% endif %}
+		</td>
+		<td>
+		    {% if pl.sus == True %}<i class="fas fa-check-square"></i>{% else %}&times;{% endif %}</td>
 		</td>
 	</tr>
 	{% endfor %}

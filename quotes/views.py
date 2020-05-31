@@ -19,6 +19,15 @@ MAX_CLIENT_SECRET = '48cd4347f180427fb116fd9376f10ca2'
 client_credentials_manager = SpotifyClientCredentials(client_id=MAX_CLIENT_ID, client_secret=MAX_CLIENT_SECRET)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
+def get_client_ip(request):
+	"""get client ip"""
+	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+	if x_forwarded_for:
+		ip = x_forwarded_for.split(',')[0]
+	else:
+		ip = request.META.get('REMOTE_ADDR')
+	return ip
+
 def my_cron_job():
 	"""Cron Job to Refresh Playlist Followers Info"""
 	print("CRON JOB GOING!")
@@ -32,33 +41,34 @@ def my_cron_job():
 
 @login_required
 def home(request):
-	"""Displays Home Page"""
-	if request.method == 'POST':
-		ticker = request.POST.get("ticker")
-		try:
-			res = sp.playlist(ticker)
-			pl = get_object_or_404(Playlist, playlist_uri=ticker)
-			playlist_name = res['name']
-			dates = [str(x)[:-3] for x in pl.dates_list.split(',') if x]
-			folls = [int(x) for x in pl.followers_list.split(',') if x]
-			image = res['images'][0]['url']
-			len_headers = len(dates)
-			len_data = len(folls)
-			result = []
-			playlist = Playlist.objects.get(playlist_uri=ticker)
-			for x in range(0, len_data, len_headers):
-				for key, val in zip(dates, folls[x:x+len_headers]):
-					result.append({'t': key, 'y': val})
-
-			args = {'image': image, 'ticker': ticker, 'api' : res, 'playlist_name' : playlist_name, 'result': result, 'init_followers' : folls[0], 'playlist' : playlist}
-			result = json.dumps(result)
-			return render(request, 'home.html', args)
-		except ValueError as e_error:
-			print(e_error)
-			logging.error(traceback.format_exc())
-			return render(request, 'home.html', {'ticker': ticker, 'e' : 'The requested playlist is not ready yet, just check back after the hour and get data mining.'})
-	else:
-		return redirect(all_playlists)
+    print(get_client_ip(request), " visited the home page")
+    """Displays Home Page"""
+    if request.method == 'POST':
+    	ticker = request.POST.get("ticker")
+    	try:
+    		res = sp.playlist(ticker)
+    		pl = get_object_or_404(Playlist, playlist_uri=ticker)
+    		playlist_name = res['name']
+    		dates = [str(x)[:-3] for x in pl.dates_list.split(',') if x]
+    		folls = [int(x) for x in pl.followers_list.split(',') if x]
+    		image = res['images'][0]['url']
+    		len_headers = len(dates)
+    		len_data = len(folls)
+    		result = []
+    		playlist = Playlist.objects.get(playlist_uri=ticker)
+    		for x in range(0, len_data, len_headers):
+    			for key, val in zip(dates, folls[x:x+len_headers]):
+    				result.append({'t': key, 'y': val})
+			#print(get_client_ip(request), "accessed a chart")
+    		args = {'image': image, 'ticker': ticker, 'api' : res, 'playlist_name' : playlist_name, 'result': result, 'init_followers' : folls[0], 'playlist' : playlist}
+    		result = json.dumps(result)
+    		return render(request, 'home.html', args)
+    	except ValueError as e_error:
+    		print(e_error)
+    		logging.error(traceback.format_exc())
+    		return render(request, 'home.html', {'ticker': ticker, 'e' : 'The requested playlist is not ready yet, just check back after the hour and get data mining.'})
+    else:
+    	return redirect(all_playlists)
 
 @login_required
 def stock_added(request):
@@ -132,4 +142,3 @@ def add_comment_to_post(request, pk):
 	else:
 		form = CommentForm()
 	return render(request, 'add_comment_to_playlist.html', {'form': form})
-	

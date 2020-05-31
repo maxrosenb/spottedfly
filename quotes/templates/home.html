@@ -2,6 +2,44 @@
 
 {% block content %}
 {% load static %}
+<style>
+.yellowdot {
+  height: 25px;
+  width: 25px;
+  background-color: #FFFF00;
+  border-radius: 50%;
+  display: inline-block;
+}
+.reddot {
+  height: 25px;
+  width: 25px;
+  background-color: #FF0000;
+  border-radius: 50%;
+  display: inline-block;
+}
+.orangereddot {
+  height: 25px;
+  width: 25px;
+  background-color: #FFBF00;
+  border-radius: 50%;
+  display: inline-block;
+}
+.greendot {
+  height: 25px;
+  width: 25px;
+  background-color: #28A745;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.darkgreendot {
+  height: 25px;
+  width: 25px;
+  background-color: #006400;
+  border-radius: 50%;
+  display: inline-block;
+}
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
 <script>
 $(window).scroll(function(){
@@ -13,7 +51,18 @@ $(window).scroll(function(){
 	{% else %}
     <h2>{{playlist_name}} Followers Info</h2>
     {% load humanize %}
-    <h3>{{init_followers|intcomma}}&#8594;{{api.followers.total|intcomma}} Followers</h3>
+    <h3>{{init_followers|intcomma}}&#8594;{{api.followers.total|intcomma}} Followers </h3>
+    {% if playlist.get_quality_display == "Neutral" %}
+		<span class="yellowdot"></span>
+		{% elif playlist.get_quality_display == "Bad" %}
+		<span class="orangereddot"></span>
+		{% elif playlist.get_quality_display == "Terrible" %}
+		<span class="reddot"></span>
+		{% elif playlist.get_quality_display == "Good" %}
+		<span class="greendot"></span>
+		{% elif playlist.get_quality_display == "Excellent" %}
+		<span class="darkgreendot"></span>
+		{% endif %}
     <div class="container">
   <canvas id="examChart2"></canvas>
 </div>
@@ -46,6 +95,7 @@ $(window).scroll(function(){
     var x = "{{result}}";
     const res= "{{ result| safe }}";
     var res_obj = eval('(' + res + ')');
+    document.write(typeof(res_obj));
     for (var i = 0; i < res_obj.length; i++) {
       //document.getElementById('chart_place').innerHTML += '<li>' + 'pl: ' + res_obj[i].y + '</li>';
       chart_data.push({
@@ -65,7 +115,7 @@ $(window).scroll(function(){
     var coordinates = [];
     dataset.data.datasets[0].data = coordinates;
 
-    
+
     for (var i = 0; i < res_obj.length; i++) {
       //document.getElementById('chart_place').innerHTML += '<li>' + 'pl: ' + res_obj[i].y + '</li>';
       coordinates.push({
@@ -86,19 +136,28 @@ data['datasets'][0]={
     borderColor: "rgba(0,0,0,0)",
     label: '{{playlist_name}}'
 };
-for (i=0;i<res_obj.length;i++){
-    pl=res_obj[i];
+var m = res_obj.length;
+
+for (i=0;i<m && i<192;i++){
+    var j = res_obj.length - i - 1;
+    pl=res_obj[j];
     data['labels'][i]=pl.t;
     data['datasets'][0].data[i]={t :pl.t, y: pl.y};
     data['datasets'][0].backgroundColor[i]='rgba(54, 162, 235, 0.2)';
 }
-
+data['labels'].reverse()
+data['datasets'][0].data.reverse()
 var myNewChart = new Chart(ctx2,{type: 'line',data: data, options: {
         scales: {
             yAxes: [{
                 scaleLabel: {
                     display: true,
                     labelString: 'Followers'
+                  }
+            }],
+            xAxes: [{
+                ticks: {
+                    maxTicksLimit: 8
                   }
             }]
         }

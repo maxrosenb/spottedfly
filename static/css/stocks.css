@@ -26,3 +26,48 @@ body {
 .comment {
   margin: 20px 0px 20px 20px;
 }
+
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.yellowdot {
+  height: 25px;
+  width: 25px;
+  background-color: #FFFF00;
+  border-radius: 50%;
+  display: inline-block;
+}
+.reddot {
+  height: 25px;
+  width: 25px;
+  background-color: #FF0000;
+  border-radius: 50%;
+  display: inline-block;
+}
+.orangereddot {
+  height: 25px;
+  width: 25px;
+  background-color: #8b0000;
+  border-radius: 50%;
+  display: inline-block;
+}
+.greendot {
+  height: 25px;
+  width: 25px;
+  background-color: #00FF00;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.darkgreendot {
+  height: 25px;
+  width: 25px;
+  background-color: #006400;
+  border-radius: 50%;
+  display: inline-block;
+}
