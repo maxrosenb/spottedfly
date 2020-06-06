@@ -49,7 +49,7 @@ $(window).scroll(function(){
 	{% if api == "Error..." %}
 		There was a problem with the api, fix it.
 	{% else %}
-    <h2>{{playlist_name}} Followers Info</h2>
+    <h2>{{playlist_name}}</h2>
     {% load humanize %}
     <h3>{{init_followers|intcomma}}&#8594;{{api.followers.total|intcomma}} Followers </h3>
     {% if playlist.get_quality_display == "Neutral" %}
@@ -95,7 +95,6 @@ $(window).scroll(function(){
     var x = "{{result}}";
     const res= "{{ result| safe }}";
     var res_obj = eval('(' + res + ')');
-    document.write(typeof(res_obj));
     for (var i = 0; i < res_obj.length; i++) {
       //document.getElementById('chart_place').innerHTML += '<li>' + 'pl: ' + res_obj[i].y + '</li>';
       chart_data.push({
@@ -138,7 +137,7 @@ data['datasets'][0]={
 };
 var m = res_obj.length;
 
-for (i=0;i<m && i<192;i++){
+for (i=0;i<m && i<1000;i++){
     var j = res_obj.length - i - 1;
     pl=res_obj[j];
     data['labels'][i]=pl.t;

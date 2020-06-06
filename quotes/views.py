@@ -76,7 +76,7 @@ def stock_added(request):
 	if request.method == 'POST':
 		ticker = request.POST['ticker']
 		results = sp.playlist(ticker)
-		new_playlist = Playlist(playlist_uri=ticker, name=results['name'])
+		new_playlist = Playlist(playlist_uri=ticker, name=results['name'], sus=False)
 		new_playlist.save()
 	return redirect(all_playlists)
 
