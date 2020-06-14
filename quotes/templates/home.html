@@ -59,9 +59,11 @@ $(window).scroll(function(){
 		{% elif playlist.get_quality_display == "Terrible" %}
 		<span class="reddot"></span>
 		{% elif playlist.get_quality_display == "Good" %}
-		<span class="greendot"></span>
+		 <span class="greendot"></span>
 		{% elif playlist.get_quality_display == "Excellent" %}
-		<span class="darkgreendot"></span>
+		 <span class="darkgreendot"></span>
+		 {% elif playlist.get_quality_display == "Tba" %}
+		 <p>TBA</p>
 		{% endif %}
     <div class="container">
   <canvas id="examChart2"></canvas>

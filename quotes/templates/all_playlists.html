@@ -3,7 +3,7 @@
 {% block content %}
 {% load static %}
 <script src="https://kit.fontawesome.com/cf79e18cdd.js" crossorigin="anonymous"></script>
-<h3><img src="{% static "cop.jpg" %}" style="float:left;padding-right:12px" width="280" />Welcome to Spottedfly. Fuck the police.</h3>
+<h4 class="text-success">Update: Growth quality has been changed to daily growth quality, and is now updated daily automatically. Welcome to the future.</h4>
 <br style="clear:both" />
 <h1> Playlists </h1>
 <style>
@@ -50,7 +50,7 @@
       <th scope="col">Chart</th>
       <th scope="col">Name</th>
 	  <th scope="col">Comments</th>
-	  <th scope="col">Growth Quality</th>
+	  <th scope="col">Growth Quality Today</th>
 	  <th scope="col">Sus</th>
     </tr>
   </thead>
@@ -80,6 +80,8 @@
 		<span class="greendot"></span>
 		{% elif pl.get_quality_display == "Excellent" %}
 		<span class="darkgreendot"></span>
+		{% elif pl.get_quality_display == "Tba" %}
+		<p>TBA</p>
 		{% endif %}
 		</td>
 		<td>

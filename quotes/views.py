@@ -9,6 +9,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import Group
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
 from .models import Playlist
@@ -39,7 +41,6 @@ def my_cron_job():
 		playlist.save()
 		print(playlist, playlist.followers_list)
 
-@login_required
 def home(request):
     print(get_client_ip(request), " visited the home page")
     """Displays Home Page"""
@@ -73,34 +74,39 @@ def home(request):
 @login_required
 def stock_added(request):
 	"""Page Displayed After Adding Playlist"""
-	if request.method == 'POST':
-		ticker = request.POST['ticker']
-		results = sp.playlist(ticker)
-		new_playlist = Playlist(playlist_uri=ticker, name=results['name'], sus=False)
-		new_playlist.save()
-	return redirect(all_playlists)
+	users_in_group = Group.objects.get(name="can_add").user_set.all()
+	if request.user in users_in_group:
 
-@login_required
+	    if request.method == 'POST':
+		    ticker = request.POST['ticker']
+		    results = sp.playlist(ticker)
+		    new_playlist = Playlist(playlist_uri=ticker, name=results['name'], sus=False)
+		    new_playlist.save()
+	    return redirect(all_playlists)
+	else:
+	    raise PermissionDenied
+
 def all_playlists(request):
 	"""View List of Playlist"""
-	pls = Playlist.objects.all()
+	pls = Playlist.objects.order_by("pk").reverse()
 	paginator = Paginator(pls, 10) # Show 25 contacts per page.
 	page_number = request.GET.get('page')
 	page_obj = paginator.get_page(page_number)
 
 	return render(request, 'all_playlists.html', {'playlists' : pls, 'page_obj': page_obj})
 
-@login_required
 def add_stock(request):
 	"""Add a Playlist"""
-	return render(request, 'add_stock.html', {})
+	users_in_group = Group.objects.get(name="can_add").user_set.all()
+	if request.user in users_in_group:
+	    return render(request, 'add_stock.html', {})
+	else:
+	    raise PermissionDenied
 
-@login_required
 def compare_songs(request):
 	"""Compare Two Songs"""
 	return render(request, 'compare_songs.html', {})
 
-@login_required
 def view_songs(request):
 	"""View The Two Compared Songs"""
 	if request.method == 'POST':
@@ -111,7 +117,6 @@ def view_songs(request):
 
 	return render(request, 'view_songs.html', {'song1_features': song1_features[0], 'song2_features': song2_features[0], 'song1_name': song1_name, 'song2_name': song2_name})
 
-@login_required
 def view_recs(request):
 	"""View Track Recommendations"""
 
@@ -119,12 +124,10 @@ def view_recs(request):
 	recs = sp.recommendations(seed_tracks=[track_name])
 	return render(request, 'view_recs.html', {'track_name' : track_name, 'recs' : recs})
 
-@login_required
 def get_recs(request):
 	"""Get Track Recommendations"""
 	return render(request, 'get_recs.html', {})
 
-@login_required
 def about(request):
 	"""About"""
 	return render(request, 'about.html', {})
@@ -142,3 +145,10 @@ def add_comment_to_post(request, pk):
 	else:
 		form = CommentForm()
 	return render(request, 'add_comment_to_playlist.html', {'form': form})
+
+def publickey(request):
+    return render(request, 'publickey.html', {})
+
+def privatekey(request):
+    return render(request, 'privatekey.html', {})
+

@@ -18,14 +18,16 @@ class Playlist(models.Model):
     OK = 'OK'
     GOOD = 'GO'
     EXCELLENT = 'EX'
+    TBA = 'TB'
     QUALITY_CHOICES = (
 	    (TERRIBLE, 'Terrible'),
 	    (BAD, 'Bad'),
 	    (OK, 'Neutral'),
 	    (GOOD, 'Good'),
 	    (EXCELLENT, 'Excellent'),
+	    (TBA, 'Tba'),
     )
-    quality = models.CharField(max_length=2, choices=QUALITY_CHOICES, default = OK)
+    quality = models.CharField(max_length=2, choices=QUALITY_CHOICES, default = TBA)
 
 
 

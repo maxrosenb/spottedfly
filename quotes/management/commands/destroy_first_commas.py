@@ -20,16 +20,16 @@ client_credentials_manager = SpotifyClientCredentials(client_id=max_client_id,cl
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 class Command(BaseCommand):
-    help = 'Displays current time'
+    help = 'Set All Qualities'
 
     def handle(self, *args, **kwargs):
 
         queryset = Playlist.objects.all()
         for playlist in queryset:
-        	playlist.followers_list += "," + str(sp.playlist(playlist.playlist_uri)['followers']['total'])
-        	now = datetime.now()
-        	if playlist.dates_list:
-        	    playlist.dates_list += "," + now.strftime('%Y-%m-%d %H:%M:%S')
-        	else:
-        	    playlist.dates_list = now.strftime('%Y-%m-%d %H:%M:%S')
-        	playlist.save()
+            print("thing: ", playlist.followers_list[0])
+            if playlist.followers_list[0] == ",":
+                playlist.followers_list = playlist.followers_list[1:]
+                print(playlist.followers_list, "DING!")
+            else:
+                print(playlist.followers_list, "NO DING!")
+            playlist.save()
