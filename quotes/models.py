@@ -4,6 +4,8 @@ Spottedfly views.py
 
 from datetime import datetime
 from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
 from django.core.validators import validate_comma_separated_integer_list
 
 class Playlist(models.Model):
@@ -12,7 +14,12 @@ class Playlist(models.Model):
     playlist_uri = models.CharField(max_length=100)
     followers_list = models.CharField(validators=[validate_comma_separated_integer_list], max_length=50000)
     dates_list = models.CharField(max_length=50000)
+    qualities_list = models.CharField(max_length=50000, null=True)
     sus = models.BooleanField()
+    avg_dance = models.FloatField(default=0)
+    avg_energy = models.FloatField(default=0)
+    avg_instru = models.FloatField(default = 0)
+    avg_valence = models.FloatField(default = 0)
     TERRIBLE = 'TE'
     BAD = 'BA'
     OK = 'OK'
@@ -28,10 +35,7 @@ class Playlist(models.Model):
 	    (TBA, 'Tba'),
     )
     quality = models.CharField(max_length=2, choices=QUALITY_CHOICES, default = TBA)
-
-
-
-
+    seven_day_quality = models.CharField(max_length=2, choices=QUALITY_CHOICES, default = TBA)
 
     def __str__(self):
     	return self.playlist_uri

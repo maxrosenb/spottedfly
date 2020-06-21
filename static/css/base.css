@@ -1,0 +1,22 @@
+body {
+    font-size: 30px;
+}
+.menu {
+    list-style: none;
+    padding-left: 0;
+}
+
+.menu-li {
+    display: inline-block;
+}
+
+.menu-li-a {
+    text-decoration: none;
+    color: #000;
+    margin: 0 0.3em;
+}
+
+.menu-li-a-active {
+    padding-bottom: 0.3em;
+    border-bottom: 4px solid #528DEA;
+}

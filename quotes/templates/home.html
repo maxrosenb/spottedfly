@@ -90,10 +90,14 @@ $(window).scroll(function(){
 {% endif %}
 
 
-		<script type="text/javascript">
-		var chart_data=[];
+	<script type="text/javascript">
+	function random_rgba() {
+        const o = Math.round, r = Math.random, s = Math.sqrt(255);
+        return 'rgba(' + o(s*r()*s) + ',' + o(s*r()*s) + ',' + o(s*r()*s) + ',' + (.3 + r().toFixed(1) *.5) + ')';
+    }
 
-		var i;
+	var chart_data=[];
+	var i;
     var x = "{{result}}";
     const res= "{{ result| safe }}";
     var res_obj = eval('(' + res + ')');
@@ -126,44 +130,45 @@ $(window).scroll(function(){
     }
 		var ctx = document.getElementById("examChart").getContext("2d");
 
-var ctx = document.getElementById("examChart").getContext("2d");
-var ctx2 = document.getElementById("examChart2").getContext("2d");
-var data=[];
-data['labels']=[];
-data['datasets']=[];
-data['datasets'][0]={
-    data: [],
-    backgroundColor: [],
-    borderColor: "rgba(0,0,0,0)",
-    label: '{{playlist_name}}'
-};
-var m = res_obj.length;
-
-for (i=0;i<m && i<1000;i++){
-    var j = res_obj.length - i - 1;
-    pl=res_obj[j];
-    data['labels'][i]=pl.t;
-    data['datasets'][0].data[i]={t :pl.t, y: pl.y};
-    data['datasets'][0].backgroundColor[i]='rgba(54, 162, 235, 0.2)';
-}
-data['labels'].reverse()
-data['datasets'][0].data.reverse()
-var myNewChart = new Chart(ctx2,{type: 'line',data: data, options: {
-        scales: {
-            yAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Followers'
-                  }
-            }],
-            xAxes: [{
-                ticks: {
-                    maxTicksLimit: 8
-                  }
-            }]
-        }
-    }});
-</script>
+    var ctx = document.getElementById("examChart").getContext("2d");
+    var ctx2 = document.getElementById("examChart2").getContext("2d");
+    var data=[];
+    data['labels']=[];
+    data['datasets']=[];
+    data['datasets'][0]={
+        data: [],
+        backgroundColor: [],
+        borderColor: "rgba(0,0,0,0)",
+        label: '{{playlist_name}}'
+    };
+    var m = res_obj.length;
+    var color = random_rgba();
+    document.write("color: " + color)
+    for (i=0;i<m && i<1000;i++){
+        var j = res_obj.length - i - 1;
+        pl=res_obj[j];
+        data['labels'][i]=pl.t;
+        data['datasets'][0].data[i]={t :pl.t, y: pl.y};
+        data['datasets'][0].backgroundColor[i]=color;
+    }
+    data['labels'].reverse()
+    data['datasets'][0].data.reverse()
+    var myNewChart = new Chart(ctx2,{type: 'line',data: data, options: {
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Followers'
+                      }
+                }],
+                xAxes: [{
+                    ticks: {
+                        maxTicksLimit: 8
+                      }
+                }]
+            }
+        }});
+    </script>
 
 <hr>
 <a class="btn btn-outline-dark" href="{% url 'add_comment_to_playlist' pk=playlist.pk %}">Add comment</a>

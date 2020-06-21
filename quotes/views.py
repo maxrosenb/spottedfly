@@ -44,32 +44,25 @@ def my_cron_job():
 def home(request):
     print(get_client_ip(request), " visited the home page")
     """Displays Home Page"""
-    if request.method == 'POST':
-    	ticker = request.POST.get("ticker")
-    	try:
-    		res = sp.playlist(ticker)
-    		pl = get_object_or_404(Playlist, playlist_uri=ticker)
-    		playlist_name = res['name']
-    		dates = [str(x)[:-3] for x in pl.dates_list.split(',') if x]
-    		folls = [int(x) for x in pl.followers_list.split(',') if x]
-    		image = res['images'][0]['url']
-    		len_headers = len(dates)
-    		len_data = len(folls)
-    		result = []
-    		playlist = Playlist.objects.get(playlist_uri=ticker)
-    		for x in range(0, len_data, len_headers):
-    			for key, val in zip(dates, folls[x:x+len_headers]):
-    				result.append({'t': key, 'y': val})
-			#print(get_client_ip(request), "accessed a chart")
-    		args = {'image': image, 'ticker': ticker, 'api' : res, 'playlist_name' : playlist_name, 'result': result, 'init_followers' : folls[0], 'playlist' : playlist}
-    		result = json.dumps(result)
-    		return render(request, 'home.html', args)
-    	except ValueError as e_error:
-    		print(e_error)
-    		logging.error(traceback.format_exc())
-    		return render(request, 'home.html', {'ticker': ticker, 'e' : 'The requested playlist is not ready yet, just check back after the hour and get data mining.'})
-    else:
-    	return redirect(all_playlists)
+    return redirect(all_playlists)
+
+
+def detail(request,pk):
+    pl_result = Playlist.objects.get(pk=pk)
+    dates = [str(x)[:-3] for x in pl_result.dates_list.split(',') if x]
+    folls = [int(x) for x in pl_result.followers_list.split(',') if x]
+    #image is the last field needed to be saved to the database before we can stop making API calls in this view
+    len_headers = len(dates)
+    len_data = len(folls)
+    result = []
+    for x in range(0, len_data, len_headers):
+    	for key, val in zip(dates, folls[x:x+len_headers]):
+    		result.append({'t': key, 'y': val})
+	#print(get_client_ip(request), "accessed a chart")
+    link = "https://open.spotify.com/playlist/" + pl_result.playlist_uri[17:]
+    xframe_uri = pl_result.playlist_uri[17:]
+    args = {'xframe_uri': xframe_uri, 'link': link, 'ticker': pl_result.playlist_uri, 'result': result, 'init_followers' : folls[0],'latest_followers' : folls[-1:][0], 'playlist' : pl_result}
+    return render(request, 'detail.html', args)
 
 @login_required
 def stock_added(request):
@@ -89,11 +82,21 @@ def stock_added(request):
 def all_playlists(request):
 	"""View List of Playlist"""
 	pls = Playlist.objects.order_by("pk").reverse()
-	paginator = Paginator(pls, 10) # Show 25 contacts per page.
+	paginator = Paginator(pls, 20) # Show 20 playlists per page.
 	page_number = request.GET.get('page')
 	page_obj = paginator.get_page(page_number)
 
 	return render(request, 'all_playlists.html', {'playlists' : pls, 'page_obj': page_obj})
+
+def results(request):
+	"""View List of Playlist"""
+	ticker = request.POST.get("ticker")
+	pls = Playlist.objects.filter(name__contains=ticker)
+	paginator = Paginator(pls, 10) # Show 25 contacts per page.
+	page_number = request.GET.get('page')
+	page_obj = paginator.get_page(page_number)
+
+	return render(request, 'results.html', {'playlists' : pls, 'page_obj': page_obj})
 
 def add_stock(request):
 	"""Add a Playlist"""
@@ -140,6 +143,7 @@ def add_comment_to_post(request, pk):
 		if form.is_valid():
 			comment = form.save(commit=False)
 			comment.post = post
+			comment.author = request.user
 			comment.save()
 			return redirect(all_playlists)
 	else:

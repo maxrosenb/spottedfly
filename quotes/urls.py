@@ -2,11 +2,13 @@
 
 from django.urls import path
 from django.conf.urls import include
+from django.views.generic.base import TemplateView
 from . import views
 
 urlpatterns = [
 	path('accounts/', include('django.contrib.auth.urls')),
 	path('', views.home, name="home"),
+	path('<int:pk>/', views.detail, name="playlist-detail"),
 	path('recs', views.get_recs, name="get_recs"),
 	path('view_recs', views.view_recs, name="view_recs"),
 	path('download_song', views.home, name="download_song"),
@@ -17,7 +19,10 @@ urlpatterns = [
 	path('playlist_success', views.stock_added, name="stock_added"),
 	path('all', views.all_playlists, name="all_playlists"),
 	path('playlist/<int:pk>/comment/', views.add_comment_to_post, name='add_comment_to_playlist'),
-	path('publickey', views.publickey, name='publickey'),
-	path('privatekey', views.publickey, name='privatekey'),
+	path('results', views.results, name="results"),
+	path(
+        "robots.txt",
+        TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
+    ),
 
 ]

@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<script src="https://kit.fontawesome.com/cf79e18cdd.js" crossorigin="anonymous"></script>
+<h1> Playlist Results </h1>
+<style>
+.yellowdot {
+  height: 25px;
+  width: 25px;
+  background-color: #FFFF00;
+  border-radius: 50%;
+  display: inline-block;
+}
+.reddot {
+  height: 25px;
+  width: 25px;
+  background-color: #FF0000;
+  border-radius: 50%;
+  display: inline-block;
+}
+.orangereddot {
+  height: 25px;
+  width: 25px;
+  background-color: #FFBF00;
+  border-radius: 50%;
+  display: inline-block;
+}
+.greendot {
+  height: 25px;
+  width: 25px;
+  background-color: #28A745;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.darkgreendot {
+  height: 25px;
+  width: 25px;
+  background-color: #006400;
+  border-radius: 50%;
+  display: inline-block;
+}
+</style>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Chart</th>
+      <th scope="col">Name</th>
+	  <th scope="col">Comments</th>
+	  <th scope="col">Growth Today</th>
+	  <th scope="col">Sus</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for pl in page_obj %}
+	<tr>
+	    <td>
+	        <a href="{% url 'playlist-detail' pl.pk %}"
+                   class="btn btn-outline-success">
+                    View Chart
+	    </td>
+	    <td>
+	        {{pl.name}}
+	    </td>
+		<td>
+		{{ pl.comments.count }}
+		</td>
+		<td>
+		{% if pl.get_quality_display == "Neutral" %}
+		<span class="yellowdot"></span>
+		{% elif pl.get_quality_display == "Bad" %}
+		<span class="orangereddot"></span>
+		{% elif pl.get_quality_display == "Terrible" %}
+		<span class="reddot"></span>
+		{% elif pl.get_quality_display == "Good" %}
+		<span class="greendot"></span>
+		{% elif pl.get_quality_display == "Excellent" %}
+		<span class="darkgreendot"></span>
+		{% elif pl.get_quality_display == "Tba" %}
+		<p>TBA</p>
+		{% endif %}
+		</td>
+		<td>
+		    {% if pl.sus == True %}<i class="fas fa-check-square"></i>{% else %}&times;{% endif %}</td>
+		</td>
+	</tr>
+	{% endfor %}
+  </tbody>
+</table>
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

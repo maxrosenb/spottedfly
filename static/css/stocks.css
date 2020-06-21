@@ -1,6 +1,26 @@
-body {
-  margin: 0;
-  height: 1000px;
+#container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+#leftThing {
+  width: 33%;
+}
+#content {
+  width: 33%;
+}
+#rightThing {
+  width: 33%;
+}
+
+.scrolling-wrapper-flexbox {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+
+  .card {
+    flex: 0 0 auto;
+  }
 }
 
 .top {
@@ -52,14 +72,14 @@ body {
 .orangereddot {
   height: 25px;
   width: 25px;
-  background-color: #8b0000;
+  background-color: #FFBF00;
   border-radius: 50%;
   display: inline-block;
 }
 .greendot {
   height: 25px;
   width: 25px;
-  background-color: #00FF00;
+  background-color: #28A745;
   border-radius: 50%;
   display: inline-block;
 }

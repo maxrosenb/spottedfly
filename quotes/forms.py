@@ -6,5 +6,4 @@ class CommentForm(forms.ModelForm):
     """ Playlist Comment Form """
     class Meta:
         model = Comment
-        fields = ('author', 'text',)
-        
+        fields = ('text',)

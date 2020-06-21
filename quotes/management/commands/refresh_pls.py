@@ -26,7 +26,10 @@ class Command(BaseCommand):
 
         queryset = Playlist.objects.all()
         for playlist in queryset:
-        	playlist.followers_list += "," + str(sp.playlist(playlist.playlist_uri)['followers']['total'])
+        	if playlist.followers_list:
+        	    playlist.followers_list += "," + str(sp.playlist(playlist.playlist_uri)['followers']['total'])
+        	else:
+        	    playlist.followers_list = str(sp.playlist(playlist.playlist_uri)['followers']['total'])
         	now = datetime.now()
         	if playlist.dates_list:
         	    playlist.dates_list += "," + now.strftime('%Y-%m-%d %H:%M:%S')

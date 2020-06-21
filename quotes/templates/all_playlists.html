@@ -3,68 +3,63 @@
 {% block content %}
 {% load static %}
 <script src="https://kit.fontawesome.com/cf79e18cdd.js" crossorigin="anonymous"></script>
-<h4 class="text-success">Update: Growth quality has been changed to daily growth quality, and is now updated daily automatically. Welcome to the future.</h4>
+<h2>Welcome to Spottedfly! Check out today's top playlists.</h2>
 <br style="clear:both" />
-<h1> Playlists </h1>
-<style>
-.yellowdot {
-  height: 25px;
-  width: 25px;
-  background-color: #FFFF00;
-  border-radius: 50%;
-  display: inline-block;
-}
-.reddot {
-  height: 25px;
-  width: 25px;
-  background-color: #FF0000;
-  border-radius: 50%;
-  display: inline-block;
-}
-.orangereddot {
-  height: 25px;
-  width: 25px;
-  background-color: #FFBF00;
-  border-radius: 50%;
-  display: inline-block;
-}
-.greendot {
-  height: 25px;
-  width: 25px;
-  background-color: #28A745;
-  border-radius: 50%;
-  display: inline-block;
-}
+<div class="scrolling-wrapper-flexbox">
 
-.darkgreendot {
-  height: 25px;
-  width: 25px;
-  background-color: #006400;
-  border-radius: 50%;
-  display: inline-block;
-}
-</style>
+  <div class="card">
+   <iframe src="https://open.spotify.com/embed/playlist/0J5GVYMrT8wbAkaNbIcCLN" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+   <a href="{% url 'playlist-detail' 57 %}" class="btn btn-success">View</a>
+  </div>
+
+  <div class="card">
+    <iframe src="https://open.spotify.com/embed/playlist/6rmuR6S0xSlQAlcJc6JMjM" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    <a href="{% url 'playlist-detail' 47 %}" class="btn btn-success">View</a>
+  </div>
+
+  <div class="card">
+      <iframe src="https://open.spotify.com/embed/playlist/3anv6LilLSXofGDR12W1Mp" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <a href="{% url 'playlist-detail' 69 %}" class="btn btn-success">View</a>
+  </div>
+
+  <div class="card">
+   <iframe src="https://open.spotify.com/embed/playlist/2o1qRzi61Qpzv8mB7aBPaP" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+   <a href="{% url 'playlist-detail' 48 %}" class="btn btn-success">View</a>
+  </div>
+
+  <div class="card">
+    <iframe src="https://open.spotify.com/embed/playlist/0MMCB0rG70wSa2aLdxXidT" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    <a href="{% url 'playlist-detail' 35 %}" class="btn btn-success">View</a>
+  </div>
+
+  <div class="card">
+      <iframe src="https://open.spotify.com/embed/playlist/43udSsOeQC1mlUYf18fb2J" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <a href="{% url 'playlist-detail' 30 %}" class="btn btn-success">View</a>
+  </div>
+
+
+</div>
+<h1> All Playlists </h1>
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">Chart</th>
-      <th scope="col">Name</th>
-	  <th scope="col">Comments</th>
-	  <th scope="col">Growth Quality Today</th>
-	  <th scope="col">Sus</th>
+      <th scope="col">Graph</th>
+      <th scope="col">Playlist Name</th>
+	  <th scope="col">Notes</th>
+	  <th scope="col">Growth</th>
+	  <th scope="col">Bots?</th>
     </tr>
   </thead>
   <tbody>
     {% for pl in page_obj %}
 	<tr>
 	    <td>
-	        <form action= "{% url 'home' %}" class="form-inline my-2 my-lg-0" method="post">
-	        <input class="form-control mr-sm-2" type="submit" name="ticker" value="{{pl.playlist_uri}}">
-	        {% csrf_token %}
-	        </form>
+	        <a href="{% url 'playlist-detail' pl.pk %}"
+                   class="btn btn-outline-success">
+                    View</a>
 	    </td>
 	    <td>
-	        {{pl.name}}
+	        <h5>{{pl.name}}</h5>
 	    </td>
 		<td>
 		{{ pl.comments.count }}
