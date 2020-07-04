@@ -4,10 +4,10 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 't9wi@@0-!ut^l9ui7b7rk%!w)&^^^zcgfe_vcd1t1#9xy7zfas'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 #SECURITY
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'django_crontab',
+    'django_cron',
+    'taggit',
+    'npm',
 ]
 
 CRONJOBS = [
@@ -124,12 +127,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = '/home/maxrosenbe/spottedfly/static'
+STATIC_ROOT = '/home/maxrosenbe/spottedflyweb/static'
 
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = (os.path.join('static'),)
 
 LOGIN_URL = '/accounts/login'
 
 LOGIN_REDIRECT_URL = '/'
+
+STATICFILES_FINDERS = ['npm.finders.NpmFinder',]
+
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'

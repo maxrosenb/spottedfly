@@ -4,6 +4,7 @@ Spottedfly views.py
 import json
 import traceback
 import logging
+import os
 from datetime import datetime
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -13,10 +14,10 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import Group
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
-from .models import Playlist
+from .models import Playlist, User
 from .forms import CommentForm
-MAX_CLIENT_ID = '83403a77c90f4836b8287b70bac39a33'
-MAX_CLIENT_SECRET = '48cd4347f180427fb116fd9376f10ca2'
+MAX_CLIENT_ID = os.getenv("MAX_CLIENT_ID")
+MAX_CLIENT_SECRET = os.getenv("MAX_CLIENT_SECRET")
 
 client_credentials_manager = SpotifyClientCredentials(client_id=MAX_CLIENT_ID, client_secret=MAX_CLIENT_SECRET)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
@@ -42,18 +43,22 @@ def my_cron_job():
 		print(playlist, playlist.followers_list)
 
 def home(request):
-    print(get_client_ip(request), " visited the home page")
     """Displays Home Page"""
+    if get_client_ip(request) != "24.20.48.43":
+        print(get_client_ip(request), " visited the home page")
+
     return redirect(all_playlists)
 
 
 def detail(request,pk):
     pl_result = Playlist.objects.get(pk=pk)
     dates = [str(x)[:-3] for x in pl_result.dates_list.split(',') if x]
-    folls = [int(x) for x in pl_result.followers_list.split(',') if x]
+    folls = [int(x) for x in pl_result.followers_list.split(',') if x != "None"]
     #image is the last field needed to be saved to the database before we can stop making API calls in this view
     len_headers = len(dates)
     len_data = len(folls)
+    if len_headers == 0:
+        return redirect('/notready')
     result = []
     for x in range(0, len_data, len_headers):
     	for key, val in zip(dates, folls[x:x+len_headers]):
@@ -61,8 +66,14 @@ def detail(request,pk):
 	#print(get_client_ip(request), "accessed a chart")
     link = "https://open.spotify.com/playlist/" + pl_result.playlist_uri[17:]
     xframe_uri = pl_result.playlist_uri[17:]
-    args = {'xframe_uri': xframe_uri, 'link': link, 'ticker': pl_result.playlist_uri, 'result': result, 'init_followers' : folls[0],'latest_followers' : folls[-1:][0], 'playlist' : pl_result}
+    rgb_red = pl_result.photo_red
+    rgb_green = pl_result.photo_green
+    rgb_blue = pl_result.photo_blue
+    args = {'rgb_red': rgb_red, 'rgb_green': rgb_green, 'rgb_blue': rgb_blue, 'xframe_uri': xframe_uri, 'link': link, 'ticker': pl_result.playlist_uri, 'result': result, 'init_followers' : folls[0],'latest_followers' : folls[-1:][0], 'playlist' : pl_result}
     return render(request, 'detail.html', args)
+
+def not_ready(request):
+    return render(request, 'not_ready.html', {})
 
 @login_required
 def stock_added(request):
@@ -91,7 +102,7 @@ def all_playlists(request):
 def results(request):
 	"""View List of Playlist"""
 	ticker = request.POST.get("ticker")
-	pls = Playlist.objects.filter(name__contains=ticker)
+	pls = Playlist.objects.filter(tags__name__in=[ticker]) | Playlist.objects.filter(name__contains=ticker)
 	paginator = Paginator(pls, 10) # Show 25 contacts per page.
 	page_number = request.GET.get('page')
 	page_obj = paginator.get_page(page_number)
@@ -156,3 +167,12 @@ def publickey(request):
 def privatekey(request):
     return render(request, 'privatekey.html', {})
 
+def himom(request):
+    return render(request, 'himom.html', {})
+
+def user_profile(request, username):
+    user = User.objects.get(username=username)
+    context = {
+       "user": user
+    }
+    return render(request, 'user_profile.html', context)

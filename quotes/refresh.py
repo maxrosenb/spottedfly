@@ -22,8 +22,8 @@ sys.path.append('/home/maxrosenbe/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'stocks.settings'
 
 django.setup()
-max_client_id = '83403a77c90f4836b8287b70bac39a33'
-max_client_secret = '48cd4347f180427fb116fd9376f10ca2'
+MAX_CLIENT_ID = os.getenv("MAX_CLIENT_ID")
+MAX_CLIENT_SECRET = os.getenv("MAX_CLIENT_SECRET")
 
 client_credentials_manager = SpotifyClientCredentials(client_id=max_client_id,client_secret=max_client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
