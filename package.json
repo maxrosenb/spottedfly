@@ -1,0 +1,13 @@
+{
+  "name": "spottedfly",
+  "version": "1.0.0",
+  "license": "SEE LICENSE IN <filename>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/maxrosenb/spottedflypro.git"
+  },
+  "dependencies": {
+    "chart.js": "^2.9.3",
+    "chartjs-plugin-zoom": "^0.7.7"
+  }
+}

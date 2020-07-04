@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<table class="table">
+ <thead>
+    <tr>
+      <th scope="col">Song</th>
+      <th scope="col">Artist</th>
+      <th scope="col">Popularity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for rec in recs.tracks %}
+    <tr>
+	    <td>
+	        {{rec.name}}
+	    </td>
+	    <td>
+	        {{rec.artists.0.name}}
+	    </td>
+	    <td>
+	        {{ rec.popularity }}
+	    </td>
+    <br/>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

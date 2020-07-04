@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Song</th>
+      <th scope="col">Loudness</th>
+      <th scope="col">Tempo</th>
+      <th scope="col">Valence</th>
+      <th scope="col">Danceability</th>
+      <th scope="col">Energy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">{{song1_name}}</th>
+      <td>{{song1_features.loudness}}</td>
+      <td>{{song1_features.tempo}}</td>
+      <td>{{song1_features.valence}}</td>
+      <td>{{song1_features.danceability}}</td>
+      <td>{{song1_features.energy}}</td>
+    </tr>
+    <tr>
+      <th scope="row">{{song2_name}}</th>
+      <td>{{song2_features.loudness}}</td>
+      <td>{{song2_features.tempo}}</td>
+      <td>{{song2_features.valence}}</td>
+      <td>{{song2_features.danceability}}</td>
+      <td>{{song2_features.energy}}</td>
+    </tr>
+    </tr>
+  </tbody>
+</table>
+
+<div id="container"></div>
+  <script src="https://code.highcharts.com/highcharts.src.js"></script>
+  <script>
+  var song1title = "{{song1_name}}";
+  var song2title = "{{song2_name}}";
+    Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Comparison of Track Features'
+        },
+        xAxis: {
+            categories: [song1title, song2title]
+        },
+        series: [{
+            name: 'Danceability',
+            data: [{{song1_features.danceability}}, {{song2_features.danceability}}]
+        }, {
+            name: 'Valence',
+            data: [{{song1_features.valence}}, {{song2_features.valence}}]
+        }, {
+            name: 'Energy ',
+            data: [{{song1_features.energy}}, {{song2_features.energy}}]
+        }]
+    });
+  </script>
+{% endblock %}

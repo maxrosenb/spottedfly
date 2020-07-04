@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<h1>Get Track Recommendations</h1>
+<br/>
+
+<form action= "{% url 'view_recs' %}" class="form-inline my-2 my-lg-0" method ="POST">
+    	{% csrf_token %}
+      <input class="form-control mr-sm-2" type="search" placeholder="URI" aria-label="Search" name="track_name">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Compare Songs</button>
+    </form>
+
+
+{% endblock %}

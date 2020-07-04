@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Blog index{% endblock %}
+
+{% block content %}
+    <h2> Spottedfly Blog </h2>
+    {% for post in posts %}
+        [ {{ post.pk }} ]
+        <a href="{{ post.get_absolute_url }}">
+            {{ post }}
+        </a>
+        <br>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+.yellowdot {
+  height: 25px;
+  width: 25px;
+  background-color: #FFFF00;
+  border-radius: 50%;
+  display: inline-block;
+}
+.reddot {
+  height: 25px;
+  width: 25px;
+  background-color: #FF0000;
+  border-radius: 50%;
+  display: inline-block;
+}
+.orangereddot {
+  height: 25px;
+  width: 25px;
+  background-color: #FFBF00;
+  border-radius: 50%;
+  display: inline-block;
+}
+.greendot {
+  height: 25px;
+  width: 25px;
+  background-color: #28A745;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.darkgreendot {
+  height: 25px;
+  width: 25px;
+  background-color: #006400;
+  border-radius: 50%;
+  display: inline-block;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+<script>
+$(window).scroll(function(){
+    $(".top").css("opacity", 1 - $(window).scrollTop() / 250);
+  });</script>
+{% if api %}
+	{% if api == "Error..." %}
+		There was a problem with the api, fix it.
+	{% else %}
+    <h2>{{playlist_name}}</h2>
+    {% load humanize %}
+    <h3>{{init_followers|intcomma}}&#8594;{{api.followers.total|intcomma}} Followers </h3>
+    {% if playlist.get_quality_display == "Neutral" %}
+		<span class="yellowdot"></span>
+		{% elif playlist.get_quality_display == "Bad" %}
+		<span class="orangereddot"></span>
+		{% elif playlist.get_quality_display == "Terrible" %}
+		<span class="reddot"></span>
+		{% elif playlist.get_quality_display == "Good" %}
+		 <span class="greendot"></span>
+		{% elif playlist.get_quality_display == "Excellent" %}
+		 <span class="darkgreendot"></span>
+		 {% elif playlist.get_quality_display == "Tba" %}
+		 <p>TBA</p>
+		{% endif %}
+    <div class="container">
+  <canvas id="examChart2"></canvas>
+</div>
+<div class="container">
+  <canvas id="examChart"></canvas>
+</div>
+
+        <div class="imagebox">
+            <h3> {{api.name}} </h3>
+            <img src= "{{image}}" alt="pic" width="200" height="200"/>
+        </div>
+
+
+
+
+	{% endif %}
+{% else %}
+	{% if e %}
+		<h2>{{ e }}</h2>
+	{% endif %}
+
+
+{% endif %}
+
+
+	<script type="text/javascript">
+	function random_rgba() {
+        const o = Math.round, r = Math.random, s = Math.sqrt(255);
+        return 'rgba(' + o(s*r()*s) + ',' + o(s*r()*s) + ',' + o(s*r()*s) + ',' + (.3 + r().toFixed(1) *.5) + ')';
+    }
+
+	var chart_data=[];
+	var i;
+    var x = "{{result}}";
+    const res= "{{ result| safe }}";
+    var res_obj = eval('(' + res + ')');
+    for (var i = 0; i < res_obj.length; i++) {
+      //document.getElementById('chart_place').innerHTML += '<li>' + 'pl: ' + res_obj[i].y + '</li>';
+      chart_data.push({
+        t: new Date(res_obj[i].t),
+        y: res_obj[i].y
+      });
+    }
+
+    var dataset = {
+      data: {
+          datasets: [{
+              label: 'Scatter Dataset',
+              data: []
+                  }]
+               }
+            };
+    var coordinates = [];
+    dataset.data.datasets[0].data = coordinates;
+
+
+    for (var i = 0; i < res_obj.length; i++) {
+      //document.getElementById('chart_place').innerHTML += '<li>' + 'pl: ' + res_obj[i].y + '</li>';
+      coordinates.push({
+        t: new Date(res_obj[i].t),
+        y: res_obj[i].y
+      });
+    }
+		var ctx = document.getElementById("examChart").getContext("2d");
+
+    var ctx = document.getElementById("examChart").getContext("2d");
+    var ctx2 = document.getElementById("examChart2").getContext("2d");
+    var data=[];
+    data['labels']=[];
+    data['datasets']=[];
+    data['datasets'][0]={
+        data: [],
+        backgroundColor: [],
+        borderColor: "rgba(0,0,0,0)",
+        label: '{{playlist_name}}'
+    };
+    var m = res_obj.length;
+    var color = random_rgba();
+    document.write("color: " + color)
+    for (i=0;i<m && i<1000;i++){
+        var j = res_obj.length - i - 1;
+        pl=res_obj[j];
+        data['labels'][i]=pl.t;
+        data['datasets'][0].data[i]={t :pl.t, y: pl.y};
+        data['datasets'][0].backgroundColor[i]=color;
+    }
+    data['labels'].reverse()
+    data['datasets'][0].data.reverse()
+    var myNewChart = new Chart(ctx2,{type: 'line',data: data, options: {
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Followers'
+                      }
+                }],
+                xAxes: [{
+                    ticks: {
+                        maxTicksLimit: 8
+                      }
+                }]
+            }
+        }});
+    </script>
+
+<hr>
+<a class="btn btn-outline-dark" href="{% url 'add_comment_to_playlist' pk=playlist.pk %}">Add comment</a>
+{% for comment in playlist.comments.all %}
+    <div class="comment">
+        <div class="date">{{ comment.created_date }}</div>
+        <strong>{{ comment.author }}</strong>
+        <p>{{ comment.text|linebreaks }}</p>
+    </div>
+{% empty %}
+    <p>No comments here yet :(</p>
+{% endfor %}
+{% endblock %}
