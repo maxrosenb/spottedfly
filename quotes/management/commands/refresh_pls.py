@@ -13,10 +13,10 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 import io
 from django.contrib.auth.decorators import login_required
 import urllib, base64
-MAX_CLIENT_ID = os.getenv("MAX_CLIENT_ID")
-MAX_CLIENT_SECRET = os.getenv("MAX_CLIENT_SECRET")
+MAX_CLIENT_ID='83403a77c90f4836b8287b70bac39a33'
+MAX_CLIENT_SECRET='48cd4347f180427fb116fd9376f10ca2'
 
-client_credentials_manager = SpotifyClientCredentials(client_id=max_client_id,client_secret=max_client_secret)
+client_credentials_manager = SpotifyClientCredentials(client_id=MAX_CLIENT_ID,client_secret=MAX_CLIENT_SECRET)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 class Command(BaseCommand):

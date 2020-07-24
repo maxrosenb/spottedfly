@@ -13,11 +13,12 @@ from django.core.paginator import Paginator
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import Group
 from spotipy.oauth2 import SpotifyClientCredentials
+from ip2geotools.databases.noncommercial import DbIpCity
 import spotipy
 from .models import Playlist, User
 from .forms import CommentForm
-MAX_CLIENT_ID = os.getenv("MAX_CLIENT_ID")
-MAX_CLIENT_SECRET = os.getenv("MAX_CLIENT_SECRET")
+MAX_CLIENT_ID='83403a77c90f4836b8287b70bac39a33'
+MAX_CLIENT_SECRET='48cd4347f180427fb116fd9376f10ca2'
 
 client_credentials_manager = SpotifyClientCredentials(client_id=MAX_CLIENT_ID, client_secret=MAX_CLIENT_SECRET)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
@@ -44,21 +45,24 @@ def my_cron_job():
 
 def home(request):
     """Displays Home Page"""
-    if get_client_ip(request) != "24.20.48.43":
-        print(get_client_ip(request), " visited the home page")
+    user_ip = get_client_ip(request)
+    if user_ip != "24.20.48.43":
+        response = DbIpCity.get(user_ip, api_key='free')
+        print(user_ip, "in", response.city, ",", response.region, ",", response.country, " visited the home page at ", datetime.now())
 
     return redirect(all_playlists)
 
-
 def detail(request,pk):
     pl_result = Playlist.objects.get(pk=pk)
+    len_followers_list = len(pl_result.followers_list.split(','))
+    if len_followers_list != 0 and (pl_result.followers_list.split(',')[0])=="":
+        return redirect('/notready')
     dates = [str(x)[:-3] for x in pl_result.dates_list.split(',') if x]
     folls = [int(x) for x in pl_result.followers_list.split(',') if x != "None"]
-    #image is the last field needed to be saved to the database before we can stop making API calls in this view
     len_headers = len(dates)
     len_data = len(folls)
-    if len_headers == 0:
-        return redirect('/notready')
+    #image is the last field needed to be saved to the database before we can stop making API calls in this view
+
     result = []
     for x in range(0, len_data, len_headers):
     	for key, val in zip(dates, folls[x:x+len_headers]):
@@ -109,6 +113,7 @@ def results(request):
 
 	return render(request, 'results.html', {'playlists' : pls, 'page_obj': page_obj})
 
+@login_required
 def add_stock(request):
 	"""Add a Playlist"""
 	users_in_group = Group.objects.get(name="can_add").user_set.all()
@@ -161,15 +166,19 @@ def add_comment_to_post(request, pk):
 		form = CommentForm()
 	return render(request, 'add_comment_to_playlist.html', {'form': form})
 
+@login_required
 def publickey(request):
     return render(request, 'publickey.html', {})
 
+@login_required
 def privatekey(request):
     return render(request, 'privatekey.html', {})
 
+@login_required
 def himom(request):
     return render(request, 'himom.html', {})
 
+@login_required
 def user_profile(request, username):
     user = User.objects.get(username=username)
     context = {

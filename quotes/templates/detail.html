@@ -192,16 +192,16 @@
   <div id="content">
     <h1>{{playlist.name}}</h1>
     <h2>Playlist Features</h2>
-    <p>{{init_followers|intcomma}}&#8594;{{latest_followers|intcomma}} Followers </p>
-    <p>Avg Danceability: {{playlist.avg_dance}}</h5>
-    <p>Avg Energy: {{playlist.avg_energy}}</h5>
+    <h3>{{init_followers|intcomma}}&#8594;{{latest_followers|intcomma}} Followers </h3>
+    <p>Avg Danceability: {{playlist.avg_dance}}</p>
+    <p>Avg Energy: {{playlist.avg_energy}}</p>
     <p>Avg Instrumentalness: {{playlist.avg_instru}}</p>
     <p>Avg Valence: {{playlist.avg_valence}}</p>
     <a class="btn btn-success"  href="{{link}}" role="button">Visit on Spotify</a>
   </div>
 
   <div id="rightThing">
-      <iframe src="https://open.spotify.com/embed/playlist/{{xframe_uri}}" width="800" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <iframe src="https://open.spotify.com/embed/playlist/{{xframe_uri}}" width="380" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
   </div>
 
 </div>
