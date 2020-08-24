@@ -2,6 +2,7 @@
 *.log
 *.pot
 *.pyc
+db.sqlite3
 __pycache__
 
 
@@ -14,3 +15,11 @@ ENV/
 env.bak/
 venv.bak/
 spottedenv/
+
+# Other #
+static-transpile/
+.ebextensions/
+.vscode/
+static-transpile/
+.DS_Store
+.pylintrc
