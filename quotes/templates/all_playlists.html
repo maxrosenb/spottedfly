@@ -3,53 +3,51 @@
 {% block content %}
 {% load static %}
 <script src="https://kit.fontawesome.com/cf79e18cdd.js" crossorigin="anonymous"></script>
-<!--<h2>Hot Playlists</h2>-->
-<!--  <div id="container">-->
-<!--      <div id="content">-->
-<!--          <iframe src="https://open.spotify.com/embed/playlist/3anv6LilLSXofGDR12W1Mp" width="1110" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>-->
-<!--      </div>-->
-<!--  </div>-->
-<!--<div class="scrolling-wrapper-flexbox">-->
+<h1> Spottedfly - Playlist Growth & Stats Tracker</h1>
+</br>
+<h2>Hot Playlists</h2>
+<div class="scrolling-wrapper-flexbox">
 
-<!--  <div class="card">-->
-<!--   <iframe src="https://open.spotify.com/embed/playlist/0J5GVYMrT8wbAkaNbIcCLN" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>-->
-<!--   <a href="{% url 'playlist-detail' 57 %}" class="btn btn-success">View</a>-->
-<!--  </div>-->
+  <div class="card">
+   <iframe src="https://open.spotify.com/embed/playlist/0J5GVYMrT8wbAkaNbIcCLN" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+   <a href="{% url 'playlist-detail' 57 %}" class="btn btn-success">View Stats</a>
+  </div>
 
-<!--  <div class="card">-->
-<!--    <iframe src="https://open.spotify.com/embed/playlist/6rmuR6S0xSlQAlcJc6JMjM" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>-->
-<!--    <a href="{% url 'playlist-detail' 47 %}" class="btn btn-success">View</a>-->
-<!--  </div>-->
+  <div class="card">
+    <iframe src="https://open.spotify.com/embed/playlist/6rmuR6S0xSlQAlcJc6JMjM" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    <a href="{% url 'playlist-detail' 47 %}" class="btn btn-success">View Stats</a>
+  </div>
 
-<!--  <div class="card">-->
-<!--      <iframe src="https://open.spotify.com/embed/playlist/3anv6LilLSXofGDR12W1Mp" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>-->
-<!--      <a href="{% url 'playlist-detail' 69 %}" class="btn btn-success">View</a>-->
-<!--  </div>-->
+  <div class="card">
+      <iframe src="https://open.spotify.com/embed/playlist/3anv6LilLSXofGDR12W1Mp" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <a href="{% url 'playlist-detail' 69 %}" class="btn btn-success">View Stats</a>
+  </div>
 
-<!--  <div class="card">-->
-<!--   <iframe src="https://open.spotify.com/embed/playlist/2o1qRzi61Qpzv8mB7aBPaP" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>-->
-<!--   <a href="{% url 'playlist-detail' 48 %}" class="btn btn-success">View</a>-->
-<!--  </div>-->
+  <div class="card">
+   <iframe src="https://open.spotify.com/embed/playlist/2o1qRzi61Qpzv8mB7aBPaP" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+   <a href="{% url 'playlist-detail' 48 %}" class="btn btn-success">View Stats</a>
+  </div>
 
-<!--  <div class="card">-->
-<!--    <iframe src="https://open.spotify.com/embed/playlist/0MMCB0rG70wSa2aLdxXidT" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>-->
-<!--    <a href="{% url 'playlist-detail' 35 %}" class="btn btn-success">View</a>-->
-<!--  </div>-->
+  <div class="card">
+    <iframe src="https://open.spotify.com/embed/playlist/0MMCB0rG70wSa2aLdxXidT" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    <a href="{% url 'playlist-detail' 35 %}" class="btn btn-success">View Stats</a>
+  </div>
 
-<!--  <div class="card">-->
-<!--      <iframe src="https://open.spotify.com/embed/playlist/43udSsOeQC1mlUYf18fb2J" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>-->
-<!--      <a href="{% url 'playlist-detail' 30 %}" class="btn btn-success">View</a>-->
-<!--  </div>-->
+  <div class="card">
+      <iframe src="https://open.spotify.com/embed/playlist/43udSsOeQC1mlUYf18fb2J" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <a href="{% url 'playlist-detail' 30 %}" class="btn btn-success">View Stats</a>
+  </div>
 
 
-<!--</div>-->
+</div>
+</br>
+
 <h1> All Playlists </h1>
-<table class="table">
+<table class="table" bordercolor="#000000">
   <thead>
-    <tr>
+    <tr style="color: #fff;">
       <th scope="col">Graph</th>
       <th scope="col">Playlist Name</th>
-	  <th scope="col">Notes</th>
   	  <th scope="col">Bots?</th>
 	  <th scope="col">Growth</th>
 
@@ -57,20 +55,17 @@
   </thead>
   <tbody>
     {% for pl in page_obj %}
-	<tr>
+	<tr bordercolor="#000000">
 	    <td>
 	        <a href="{% url 'playlist-detail' pl.pk %}"
                    class="btn btn-secondary">
-                    View</a>
+                    view</a>
 	    </td>
 	    <td>
 	        <h5>{{pl.name}}</h5>
 	    </td>
 		<td>
-		{{ pl.comments.count }}
-		</td>
-		<td>
-		    {% if pl.sus == True %}<i class="fas fa-check-square"></i>{% else %}No{% endif %}</td>
+		    {% if pl.sus == True %}<p>Yes</p>{% else %}<p>No</p>{% endif %}</td>
 		</td>
 		<td>
 		{% if pl.get_quality_display == "Neutral" %}

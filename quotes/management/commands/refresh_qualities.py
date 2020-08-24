@@ -26,7 +26,7 @@ class Command(BaseCommand):
         queryset = Playlist.objects.all()
         for playlist in queryset:
             differences = []
-            followers_unstrung = [int(x) for x in playlist.followers_list.split(',')]
+            followers_unstrung = [int(x) for x in playlist.followers_list.split(',') if x != 'None']
             if len(followers_unstrung) > 24:
                 followers_unstrung = followers_unstrung[-24:]
                 for i in range(1,len(followers_unstrung)):
@@ -36,8 +36,6 @@ class Command(BaseCommand):
                     playlist.quality = Playlist.EXCELLENT
                 elif total > 50:
                     playlist.quality = Playlist.GOOD
-                elif total > 25:
-                    playlist.quality = Playlist.OK
                 elif total > 10:
                     playlist.quality = Playlist.BAD
                 else:

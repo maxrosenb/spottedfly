@@ -1,9 +1,6 @@
 """
 Spottedfly views.py
 """
-import json
-import traceback
-import logging
 import os
 from datetime import datetime
 from django.shortcuts import get_object_or_404
@@ -17,8 +14,8 @@ from ip2geotools.databases.noncommercial import DbIpCity
 import spotipy
 from .models import Playlist, User
 from .forms import CommentForm
-MAX_CLIENT_ID='83403a77c90f4836b8287b70bac39a33'
-MAX_CLIENT_SECRET='48cd4347f180427fb116fd9376f10ca2'
+MAX_CLIENT_ID=os.getenv("MAX_CLIENT_ID")
+MAX_CLIENT_SECRET=os.getenv("MAX_CLIENT_SECRET")
 
 client_credentials_manager = SpotifyClientCredentials(client_id=MAX_CLIENT_ID, client_secret=MAX_CLIENT_SECRET)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
@@ -106,12 +103,9 @@ def all_playlists(request):
 def results(request):
 	"""View List of Playlist"""
 	ticker = request.POST.get("ticker")
-	pls = Playlist.objects.filter(tags__name__in=[ticker]) | Playlist.objects.filter(name__contains=ticker)
-	paginator = Paginator(pls, 10) # Show 25 contacts per page.
-	page_number = request.GET.get('page')
-	page_obj = paginator.get_page(page_number)
+	pls = Playlist.objects.filter(tags__name__in=[ticker]).distinct() | Playlist.objects.filter(name__contains=ticker).distinct()
 
-	return render(request, 'results.html', {'playlists' : pls, 'page_obj': page_obj})
+	return render(request, 'results.html', {'playlists' : pls, 'page_obj': pls})
 
 @login_required
 def add_stock(request):

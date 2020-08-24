@@ -44,10 +44,9 @@
         y: res_obj[i].y
       });
     }
-		var ctx = document.getElementById("examChart").getContext("2d");
 
-    var ctx = document.getElementById("examChart").getContext("2d");
     var ctx2 = document.getElementById("examChart2").getContext("2d");
+    ctx2.height = 10;
     var data=[];
     data['labels']=[];
     data['datasets']=[];
@@ -77,12 +76,19 @@
             maintainAspectRatio: false,
             scales: {
                 yAxes: [{
+                    gridLines: {
+                display:false
+            },
                     scaleLabel: {
                         display: true,
                         labelString: 'Followers'
                       }
-                }],
+                },
+                ],
                 xAxes: [{
+                    gridLines: {
+                display:false
+            },
                     type: 'time',
                     ticks: {
                         maxTicksLimit: 12
@@ -201,7 +207,7 @@
   </div>
 
   <div id="rightThing">
-      <iframe src="https://open.spotify.com/embed/playlist/{{xframe_uri}}" width="380" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      <iframe src="https://open.spotify.com/embed/playlist/{{xframe_uri}}" width="720" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
   </div>
 
 </div>
@@ -210,12 +216,8 @@
     <div class="container">
         <h2>Followers Data</h2>
         <p>Try out the new zoom feature! Use the mousewheel or highlight an area to zoom in.</p>
-  <canvas id="examChart2" style="height:400px"></canvas>
+  <canvas id="examChart2" style="height:400px;"></canvas>
 </div>
-<div class="container">
-  <canvas id="examChart"></canvas>
-</div>
-
 <h2>Comments</h2>
 <a class="btn btn-outline-dark" href="{% url 'add_comment_to_playlist' pk=playlist.pk %}">Add comment</a>
 {% for comment in playlist.comments.all %}
