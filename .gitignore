@@ -20,6 +20,6 @@ spottedenv/
 static-transpile/
 .ebextensions/
 .vscode/
-static-transpile/
+.transpile/
 .DS_Store
 .pylintrc
