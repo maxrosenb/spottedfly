@@ -48,7 +48,7 @@ pyrsistent==0.16.0
 python-dateutil==2.8.0
 python-dotenv==0.14.0
 pytz==2020.1
-PyYAML==5.3.1
+PyYAML==5.4
 requests==2.20.1
 scipy==1.5.0
 semantic-version==2.5.0
@@ -136,7 +136,7 @@ pyrsistent==0.16.0
 python-dateutil==2.8.0
 python-dotenv==0.14.0
 pytz==2020.1
-PyYAML==5.3.1
+PyYAML==5.4
 ratelim==0.1.6
 readme-renderer==26.0
 requests==2.20.1
