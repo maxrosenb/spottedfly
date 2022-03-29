@@ -38,7 +38,7 @@ kiwisolver==1.2.0
 matplotlib==3.2.1
 numpy==1.18.4
 pandas==1.0.3
-paramiko==2.7.1
+paramiko==2.10.1
 pathspec==0.5.9
 Pillow==7.2.0
 pycparser==2.20
@@ -120,7 +120,7 @@ mccabe==0.6.1
 numpy==1.18.4
 packaging==20.4
 pandas==1.0.3
-paramiko==2.7.1
+paramiko==2.10.1
 pathspec==0.5.9
 Pillow==7.2.0
 pip-review==1.1.0
