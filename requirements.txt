@@ -36,7 +36,7 @@ JSON-minify==0.3.0
 jsonschema==3.2.0
 kiwisolver==1.2.0
 matplotlib==3.2.1
-numpy==1.18.4
+numpy==1.22.0
 pandas==1.0.3
 paramiko==2.7.1
 pathspec==0.5.9
@@ -117,7 +117,7 @@ lxml==4.5.1
 matplotlib==3.2.1
 maxminddb==1.5.4
 mccabe==0.6.1
-numpy==1.18.4
+numpy==1.22.0
 packaging==20.4
 pandas==1.0.3
 paramiko==2.7.1
